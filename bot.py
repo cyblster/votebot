@@ -13,7 +13,7 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
-admin_list = [418064835, ]
+admin_list = []
 member_list = []
 
 server = Flask(__name__)
