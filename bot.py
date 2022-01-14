@@ -60,8 +60,10 @@ with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db
 server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
 
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.FileHandler("test.log", "w", "utf-8"))
+handler = logging.FileHandler(filename="test.log", encoding="utf-8")
+handler.setLevel(logging.DEBUG)
+handler.setFormatter(logging.Formatter("u'%(asctime)-s %(levelname)s [%(name)s]: %(message)s"))
+logger.addHandler(handler)
 
 
 # flask
