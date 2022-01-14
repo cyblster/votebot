@@ -3,6 +3,7 @@ import pymysql
 
 from flask import Flask, request
 from telebot import TeleBot, types
+from datetime import datetime, timedelta
 
 
 APP_URL = os.environ.get("app_url")
@@ -12,6 +13,12 @@ MYSQL_HOST = os.environ.get("mysql_host")
 MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
+
+OWNER_MENU_TEXT = "Время сейчас: {time_current}\n\n" \
+                  "Текущий вопрос: {question_current}\n\n" \
+                  "Голосование началось в: {time_start}\n" \
+                  "Голосование закончится в: {time_end}\n" \
+                  "Осталось {time_left}\n"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
@@ -80,7 +87,13 @@ def command_start(message):
     if message.from_user.id in [owner["telegram_id"] for owner in owner_list]:
         bot.send_message(
             chat_id=message.from_user.id,
-            text="Тест меню",
+            text=OWNER_MENU_TEXT.format(
+                time_current=1,
+                question_current=2,
+                time_start=3,
+                time_end=4,
+                time_left=5
+            ),
             reply_markup=owner_inline_keyboard
         )
 
