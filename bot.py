@@ -98,10 +98,13 @@ def command_start(message):
         )
 
     elif message.from_user.id in [member["telegram_id"] for member in member_list]:
-        print(2)
+        bot.send_message(
+            chat_id=message.from_user.id,
+            text="Вы уже зарегистрировались! Ожидайте начала."
+        )
 
     else:
-        print(3)
+        pass
 
 
 @bot.callback_query_handler(lambda call: True)
