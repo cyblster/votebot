@@ -41,9 +41,6 @@ with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db
                 }
             })
 
-print(owner_list)
-print(member_list)
-
 server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
 
@@ -59,7 +56,7 @@ def bot_webhook():
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
-    if message.from_user.id in owner_list:
+    if str(message.from_user.id) in owner_list:
         inline_keyboard = types.InlineKeyboardMarkup()
         inline_keyboard.add(
             types.InlineKeyboardButton(text="Начать голосование", callback_data="button_start"),
