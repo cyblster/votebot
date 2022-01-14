@@ -91,8 +91,10 @@ def command_start(message):
         print(3)
 
 
-@bot.callback_query_handler(lambda call: call.data == "vote_start")
+@bot.callback_query_handler(lambda call: True)
 def handler_query(call):
+    print(call.data)
+
     for owner in owner_list:
         bot.edit_message_text(
             chat_id=call.message.from_user.id,
