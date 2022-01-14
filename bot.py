@@ -20,11 +20,10 @@ with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db
         for fetch in cursor.fetchall():
             telegram_id, telegram_username, telegram_firstname, telegram_lastname = fetch[:4]
             owner_list.append({
-                telegram_id: {
-                    "telegram_username": telegram_username,
-                    "telegram_firstname": telegram_firstname,
-                    "telegram_lastname": telegram_lastname
-                }
+                "telegram_id": telegram_id,
+                "telegram_username": telegram_username,
+                "telegram_firstname": telegram_firstname,
+                "telegram_lastname": telegram_lastname
             })
 
 member_list = []
@@ -33,17 +32,19 @@ with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db
         cursor.execute("SELECT * FROM `member`")
         for fetch in cursor.fetchall():
             telegram_id, telegram_username, telegram_firstname, telegram_lastname = fetch[:4]
-            owner_list.append({
-                telegram_id: {
-                    "telegram_username": telegram_username,
-                    "telegram_firstname": telegram_firstname,
-                    "telegram_lastname": telegram_lastname
-                }
+            member_list.append({
+                "telegram_id": telegram_id,
+                "telegram_username": telegram_username,
+                "telegram_firstname": telegram_firstname,
+                "telegram_lastname": telegram_lastname
             })
 
 server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
 
+
+# flask
+# =================================================================================================================
 
 @server.route("/vote")
 def vote_result():
@@ -61,9 +62,12 @@ def bot_webhook():
     return "!", 200
 
 
+# telegram
+# =================================================================================================================
+
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
-    if message.from_user.id in dict.keys(*owner_list):
+    if message.from_user.id in [owner["telegram_id"] for owner in owner_list]:
         inline_keyboard = types.InlineKeyboardMarkup()
         inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
         inline_keyboard.add(types.InlineKeyboardButton(text="Выбрать вопрос", callback_data="vote_choose"))
@@ -74,12 +78,21 @@ def command_start(message):
             reply_markup=inline_keyboard
         )
 
-    elif message.from_user.id in dict.keys(*member_list):
+    elif message.from_user.id in [member["telegram_id"] for member in member_list]:
         print(2)
 
     else:
         print(3)
 
+
+@bot.callback_query_handler(func=lambda call: True)
+def handler_query(call):
+    if call.data == "vote_start":
+        for owner in owner_list:
+            bot.send_message(
+                chat_id=owner["telegram_id"],
+                text="Голосование началось"
+            )
 
 if __name__ == "__main__":
     bot.remove_webhook()
