@@ -13,7 +13,7 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
-admin_list = [418064835, ]
+admin_list = []
 member_list = []
 
 server = Flask(__name__)
@@ -80,6 +80,8 @@ if __name__ == "__main__":
     bot.remove_webhook()
     bot.set_webhook(url=APP_URL + APP_TOKEN)
     server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
+    admin_list.append(418064835)
 
     for fetch in mysql_query("SELECT * FROM users"):
         member_list.append({
