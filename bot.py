@@ -13,6 +13,16 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
+owner_inline_keyboard = types.InlineKeyboardMarkup()
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Выбрать вопрос", callback_data="vote_choose"))
+
+member_inline_keyboard = types.InlineKeyboardMarkup()
+member_inline_keyboard.add(
+    types.InlineKeyboardButton(text="Вариант А", callback_data="vote_a"),
+    types.InlineKeyboardButton(text="Вариант Б", callback_data="vote_b")
+)
+
 owner_list = []
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
     with connection.cursor() as cursor:
@@ -68,14 +78,10 @@ def bot_webhook():
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
     if message.from_user.id in [owner["telegram_id"] for owner in owner_list]:
-        inline_keyboard = types.InlineKeyboardMarkup()
-        inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
-        inline_keyboard.add(types.InlineKeyboardButton(text="Выбрать вопрос", callback_data="vote_choose"))
-
         bot.send_message(
             chat_id=message.from_user.id,
             text="Тест меню",
-            reply_markup=inline_keyboard
+            reply_markup=owner_inline_keyboard
         )
 
     elif message.from_user.id in [member["telegram_id"] for member in member_list]:
@@ -85,16 +91,20 @@ def command_start(message):
         print(3)
 
 
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(lambda call: call.data == "vote_start")
 def handler_query(call):
-    if call.data == "vote_start":
-        for owner in owner_list:
-            bot.send_message(
-                chat_id=owner["telegram_id"],
-                text="Голосование началось"
-            )
+    for owner in owner_list:
+        bot.edit_message_text(
+            chat_id=call.message.from_user.id,
+            text="Вы начали голосование",
+            reply_markup=owner_inline_keyboard
+        )
 
-    bot.answer_inline_query(call.id)
+        bot.send_message(
+            chat_id=owner["telegram_id"],
+            text="Голосование началось",
+            reply_markup=member_inline_keyboard
+        )
 
 
 if __name__ == "__main__":
