@@ -93,16 +93,14 @@ def command_start(message):
 
 @bot.callback_query_handler(lambda call: True)
 def handler_query(call):
-    print(call.data)
+    bot.edit_message_text(
+        chat_id=call.message.from_user.id,
+        message_id=call.message.message_id,
+        text="Вы начали голосование",
+        reply_markup=owner_inline_keyboard
+    )
 
     for owner in owner_list:
-        bot.edit_message_text(
-            chat_id=call.message.from_user.id,
-            message_id=call.message.message_id,
-            text="Вы начали голосование",
-            reply_markup=owner_inline_keyboard
-        )
-
         bot.send_message(
             chat_id=owner["telegram_id"],
             text="Голосование началось",
