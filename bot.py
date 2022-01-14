@@ -16,7 +16,7 @@ MYSQL_DATABASE = os.environ.get("mysql_database")
 owner_list = []
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
     with connection.cursor() as cursor:
-        cursor.execute("SELECT `telegram_id` FROM `owner`")
+        cursor.execute("SELECT * FROM `owner`")
         for fetch in cursor.fetchall():
             telegram_id, telegram_username, telegram_firstname, telegram_lastname = fetch[:4]
             owner_list.append({
@@ -30,7 +30,7 @@ with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db
 member_list = []
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
     with connection.cursor() as cursor:
-        cursor.execute("SELECT `telegram_id` FROM `member`")
+        cursor.execute("SELECT * FROM `member`")
         for fetch in cursor.fetchall():
             telegram_id, telegram_username, telegram_firstname, telegram_lastname = fetch[:4]
             owner_list.append({
