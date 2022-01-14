@@ -56,26 +56,14 @@ def bot_webhook():
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
-    if str(message.from_user.id) in owner_list:
-        inline_keyboard = types.InlineKeyboardMarkup()
-        inline_keyboard.add(
-            types.InlineKeyboardButton(text="Начать голосование", callback_data="button_start"),
-        )
-        inline_keyboard.add(
-            types.InlineKeyboardButton(text="Выбрать вопрос", callback_data="button_choose"),
-        )
-
-        bot.send_message(
-            chat_id=message.from_user.id,
-            text="Меню",
-            reply_markup=inline_keyboard
-        )
+    if message.from_user.id in owner_list:
+        print(1)
 
     elif message.from_user.id in member_list:
-        pass
+        print(2)
 
     else:
-        pass
+        print(3)
 
 
 if __name__ == "__main__":
