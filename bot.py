@@ -57,9 +57,17 @@ def bot_webhook():
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
     if message.from_user.id in dict.keys(*owner_list):
-        print(1)
+        inline_keyboard = types.InlineKeyboardMarkup()
+        inline_keyboard.add(types.InlineKeyboardButton(text="Кнопка 1", callback_data="button1"))
+        inline_keyboard.add(types.InlineKeyboardButton(text="Кнопка 2", callback_data="button2"))
 
-    elif message.from_user.id in member_list:
+        bot.send_message(
+            chat_id=message.from_user.id,
+            text="Тест меню",
+            reply_markup=inline_keyboard
+        )
+
+    elif message.from_user.id in dict.keys(*member_list):
         print(2)
 
     else:
