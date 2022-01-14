@@ -3,7 +3,7 @@ import pymysql
 
 from flask import Flask, request
 from telebot import TeleBot, types
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 APP_URL = os.environ.get("app_url")
@@ -88,7 +88,7 @@ def command_start(message):
         bot.send_message(
             chat_id=message.from_user.id,
             text=OWNER_MENU_TEXT.format(
-                time_current=datetime.now().strftime("%H:%M:%S"),
+                time_current=datetime.now(tz=timezone(timedelta(5))).strftime("%H:%M:%S"),
                 question_current=2,
                 time_start=3,
                 time_end=4,
