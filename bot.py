@@ -18,7 +18,7 @@ OWNER_MENU_TEXT = "Время сейчас: {time_current}\n\n" \
                   "Текущий вопрос: {question_current}\n\n" \
                   "Голосование началось в: {time_start}\n" \
                   "Голосование закончится в: {time_end}\n" \
-                  "Осталось {time_left}\n"
+                  "Времени осталось: {time_left}\n"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
@@ -88,7 +88,7 @@ def command_start(message):
         bot.send_message(
             chat_id=message.from_user.id,
             text=OWNER_MENU_TEXT.format(
-                time_current=1,
+                time_current=datetime.now().strftime("%H:%M:%S"),
                 question_current=2,
                 time_start=3,
                 time_end=4,
