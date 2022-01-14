@@ -16,12 +16,12 @@ MYSQL_DATABASE = os.environ.get("mysql_database")
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
     with connection.cursor() as cursor:
         cursor.execute("SELECT `telegram_id` FROM `owner`")
-        owner_list = cursor.fetchall()
+        owner_list = [fetch[0] for fetch in cursor.fetchall()]
 
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
     with connection.cursor() as cursor:
         cursor.execute("SELECT `telegram_id` FROM `member`")
-        member_list = cursor.fetchall()
+        member_list = [fetch[0] for fetch in cursor.fetchall()]
 
 print(owner_list)
 print(member_list)
