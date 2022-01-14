@@ -94,7 +94,8 @@ def handler_query(call):
                 text="Голосование началось"
             )
 
-        bot.answer_inline_query(call.id)
+    bot.answer_inline_query(call.id)
+
 
 if __name__ == "__main__":
     bot.remove_webhook()
