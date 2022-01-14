@@ -13,20 +13,23 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
-admin_list = []
+admin_list = [418064835, ]
 member_list = []
 
 server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
 
 
-def mysql_query(query: str):
+def mysql_query(query: str, commit: bool = False):
     with pymysql.connect(
             host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD,
             database=MYSQL_DATABASE
     ) as connection:
         with connection.cursor() as cursor:
             cursor.execute(query)
+
+            if commit:
+                connection.commit()
 
             return cursor.fetchall()
 
@@ -58,30 +61,39 @@ def command_start(message):
         )
 
     else:
-        telegram_id = message.from_user.id
-        telegram_username = message.from_user.username
-        telegram_firstname = message.from_user.firstname
-        telegram_lastname = message.from_user.lastname
+        if message.from_user.id not in member_list:
+            telegram_id = message.from_user.id
+            telegram_username = message.from_user.username
+            telegram_firstname = message.from_user.firstname
+            telegram_lastname = message.from_user.lastname
 
-        if not telegram_username:
-            telegram_username = "NULL"
-        if not telegram_firstname:
-            telegram_firstname = "NULL"
-        if not telegram_lastname:
-            telegram_lastname = "NULL"
+            if not telegram_username:
+                telegram_username = "NULL"
+            if not telegram_firstname:
+                telegram_firstname = "NULL"
+            if not telegram_lastname:
+                telegram_lastname = "NULL"
 
-        mysql_query(
-            f"INSERT INTO users (telegram_id, telegram_username, telegram_firstname, telegram_lastname) "
-            f"VALUES ({telegram_id}, {telegram_username}, {telegram_firstname}, {telegram_lastname})"
-        )
+            mysql_query(
+                f"INSERT INTO users (telegram_id, telegram_username, telegram_firstname, telegram_lastname) "
+                f"VALUES ({telegram_id}, {telegram_username}, {telegram_firstname}, {telegram_lastname})",
+
+                commit=True
+            )
+
+            member_list.append({
+                telegram_id: {
+                    "telegram_username": telegram_username,
+                    "telegram_firstname": telegram_firstname,
+                    "telegram_lastname": telegram_lastname
+                }
+            })
 
 
 if __name__ == "__main__":
     bot.remove_webhook()
     bot.set_webhook(url=APP_URL + APP_TOKEN)
     server.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
-    admin_list.append(418064835)
 
     for fetch in mysql_query("SELECT * FROM users"):
         member_list.append({
