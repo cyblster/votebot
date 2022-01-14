@@ -45,6 +45,13 @@ server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
 
 
+@server.route("/vote")
+def vote_result():
+    result = "<h1>Результаты</h1>"
+
+    return result, 200
+
+
 @server.route(f"/{APP_TOKEN}", methods=["POST"])
 def bot_webhook():
     json_string = request.get_data().decode("utf-8")
@@ -58,8 +65,8 @@ def bot_webhook():
 def command_start(message):
     if message.from_user.id in dict.keys(*owner_list):
         inline_keyboard = types.InlineKeyboardMarkup()
-        inline_keyboard.add(types.InlineKeyboardButton(text="Кнопка 1", callback_data="button1"))
-        inline_keyboard.add(types.InlineKeyboardButton(text="Кнопка 2", callback_data="button2"))
+        inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
+        inline_keyboard.add(types.InlineKeyboardButton(text="Выбрать вопрос", callback_data="vote_choose"))
 
         bot.send_message(
             chat_id=message.from_user.id,
