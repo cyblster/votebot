@@ -56,8 +56,7 @@ def bot_webhook():
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
-    print(type(message.from_user.id))
-    if message.from_user.id in owner_list:
+    if message.from_user.id in dict.keys(*owner_list):
         print(1)
 
     elif message.from_user.id in member_list:
