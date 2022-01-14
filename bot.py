@@ -1,9 +1,8 @@
 import os
 import pymysql
-import logging
 
 from flask import Flask, request
-from telebot import TeleBot, types, logger
+from telebot import TeleBot, types
 from datetime import datetime, timedelta, timezone
 
 
@@ -59,11 +58,6 @@ with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db
 
 server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
-
-handler = logging.FileHandler(filename="test.log", encoding="utf-8")
-handler.setLevel(logging.DEBUG)
-handler.setFormatter(logging.Formatter("u'%(asctime)-s %(levelname)s [%(name)s]: %(message)s"))
-logger.addHandler(handler)
 
 
 # flask
