@@ -13,15 +13,33 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
+owner_list = []
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
     with connection.cursor() as cursor:
         cursor.execute("SELECT `telegram_id` FROM `owner`")
-        owner_list = [fetch[0] for fetch in cursor.fetchall()]
+        for fetch in cursor.fetchall():
+            telegram_id, telegram_username, telegram_firstname, telegram_lastname = fetch[:4]
+            owner_list.append({
+                telegram_id: {
+                    "telegram_username": telegram_username,
+                    "telegram_firstname": telegram_firstname,
+                    "telegram_lastname": telegram_lastname
+                }
+            })
 
+member_list = []
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
     with connection.cursor() as cursor:
         cursor.execute("SELECT `telegram_id` FROM `member`")
-        member_list = [fetch[0] for fetch in cursor.fetchall()]
+        for fetch in cursor.fetchall():
+            telegram_id, telegram_username, telegram_firstname, telegram_lastname = fetch[:4]
+            owner_list.append({
+                telegram_id: {
+                    "telegram_username": telegram_username,
+                    "telegram_firstname": telegram_firstname,
+                    "telegram_lastname": telegram_lastname
+                }
+            })
 
 print(owner_list)
 print(member_list)
@@ -55,6 +73,12 @@ def command_start(message):
             text="Меню",
             reply_markup=inline_keyboard
         )
+
+    elif message.from_user.id in member_list:
+        pass
+
+    else:
+        pass
 
 
 if __name__ == "__main__":
