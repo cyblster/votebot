@@ -61,6 +61,7 @@ server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
 
 logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.FileHandler("test.log", "w", "utf-8"))
 
 
 # flask
