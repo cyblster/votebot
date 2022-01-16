@@ -107,7 +107,7 @@ def command_start(message):
                 bot.send_message(
                     chat_id=message.from_user.id,
                     text=MENU_TEXT.format(
-                        timestamp=datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
+                        timestamp=datetime.now().strftime("%H:%M:%S"),
                         question=question,
                         answer_a=answer_a,
                         answer_b=answer_b,
@@ -140,7 +140,7 @@ def handler_query(call):
                     chat_id=call.from_user.id,
                     message_id=call.message.message_id,
                     text=MENU_TEXT.format(
-                        timestamp=datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
+                        timestamp=datetime.now().strftime("%H:%M:%S"),
                         question=question,
                         answer_a=answer_a,
                         answer_b=answer_b,
