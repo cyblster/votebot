@@ -140,7 +140,7 @@ def message_any(message):
                     db=MYSQL_DATABASE, autocommit=True
             ) as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(f"UPDATE `system` SET question = {message.text}")
+                    cursor.execute(f"UPDATE `system` SET question = {message.text} WHERE id = 1")
 
             bot.send_message(
                 chat_id=message.from_user.id,
@@ -153,7 +153,7 @@ def message_any(message):
                     db=MYSQL_DATABASE, autocommit=True
             ) as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(f"UPDATE `system` SET answer_a = {message.text}")
+                    cursor.execute(f"UPDATE `system` SET answer_a = {message.text} WHERE id = 1")
 
         elif setting_answer_b_is_active:
             with pymysql.connect(
@@ -161,7 +161,7 @@ def message_any(message):
                     db=MYSQL_DATABASE, autocommit=True
             ) as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(f"UPDATE `system` SET answer_b = {message.text}")
+                    cursor.execute(f"UPDATE `system` SET answer_b = {message.text} WHERE id = 1")
 
 
 @bot.callback_query_handler(lambda call: True)
