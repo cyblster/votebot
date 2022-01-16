@@ -25,6 +25,11 @@ MENU_TEXT = "<b>[Меню] ({timestamp})</b>\n\n" \
 SETTINGS_TEXT = "<b>[Настройки голосования] ({timestamp})</b>\n\n" \
                 "{text}"
 
+MEMBER_TEXT = "<b>[Вопрос] ({timestamp})</b>\n\n" \
+              "{question}\n\n" \
+              "А) {answer_a}\n" \
+              "Б) {answer_b}"
+
 setting_question_is_active = False
 setting_answer_a_is_active = False
 setting_answer_b_is_active = False
@@ -321,7 +326,24 @@ def handler_query(call):
         )
 
     elif call.data == "vote_start":
-        pass
+        with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM `system`")
+                fetch = cursor.fetchall()
+                _id, question, answer_a, answer_b, is_active = fetch[0][:5]
+
+                for telegram_id in [member["telegram_id"] for member in member_list]:
+                    bot.send_message(
+                        chat_id=telegram_id,
+                        text=MENU_TEXT.format(
+                            timestamp=datetime.now().strftime("%H:%M:%S"),
+                            question=question,
+                            answer_a=answer_a,
+                            answer_b=answer_b
+                        ),
+                        parse_mode="HTML",
+                        reply_markup=member_inline_keyboard
+                    )
 
 
 if __name__ == "__main__":
