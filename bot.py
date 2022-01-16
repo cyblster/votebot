@@ -249,7 +249,8 @@ def handler_query(call):
                 timestamp=datetime.now().strftime("%H:%M:%S"),
                 text="Напишите текст вопроса:"
             ),
-            parse_mode="HTML"
+            parse_mode="HTML",
+            reply_markup=owner_inline_keyboard
         )
 
     elif call.data == "settings_answer_a":
@@ -264,7 +265,8 @@ def handler_query(call):
                 timestamp=datetime.now().strftime("%H:%M:%S"),
                 text="Напишите текст ответа А:"
             ),
-            parse_mode="HTML"
+            parse_mode="HTML",
+            reply_markup=owner_inline_keyboard
         )
 
     elif call.data == "settings_answer_b":
@@ -279,7 +281,8 @@ def handler_query(call):
                 timestamp=datetime.now().strftime("%H:%M:%S"),
                 text="Напишите текст ответа Б:"
             ),
-            parse_mode="HTML"
+            parse_mode="HTML",
+            reply_markup=owner_inline_keyboard
         )
 
     elif call.data == "vote_start":
