@@ -335,7 +335,7 @@ def handler_query(call):
                 for telegram_id in [member["telegram_id"] for member in member_list]:
                     bot.send_message(
                         chat_id=telegram_id,
-                        text=MENU_TEXT.format(
+                        text=MEMBER_TEXT.format(
                             timestamp=datetime.now().strftime("%H:%M:%S"),
                             question=question,
                             answer_a=answer_a,
