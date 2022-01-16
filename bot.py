@@ -133,6 +133,11 @@ def command_start(message):
         )
 
     else:
+        telegram_id = message.from_user.id
+        telegram_username = message.from_user.id if message.from_user.id else "NULL"
+        telegram_firstname = message.from_user.firstname if message.from_user.firstname else "NULL"
+        telegram_lastname = message.from_user.lastname if message.from_user.lastname else "NULL"
+
         with pymysql.connect(
                 host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
                 db=MYSQL_DATABASE, autocommit=True
@@ -143,17 +148,17 @@ def command_start(message):
                                f"VALUES ('{telegram_id}', '{telegram_username}', '{telegram_firstname}', "
                                f"'{telegram_lastname}')")
 
-                member_list.append({
-                    "telegram_id": telegram_id,
-                    "telegram_username": telegram_username,
-                    "telegram_firstname": telegram_firstname,
-                    "telegram_lastname": telegram_lastname
-                })
+        member_list.append({
+            "telegram_id": telegram_id,
+            "telegram_username": telegram_username,
+            "telegram_firstname": telegram_firstname,
+            "telegram_lastname": telegram_lastname
+        })
 
-                bot.send_message(
-                    chat_id=message.from_user.id,
-                    text="Благодарим за регистрацию! Ожидайте начала."
-                )
+        bot.send_message(
+            chat_id=message.from_user.id,
+            text="Благодарим за регистрацию! Ожидайте начала."
+        )
 
 
 @bot.message_handler(content_types=["text"], chat_types=["private"])
