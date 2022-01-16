@@ -150,6 +150,11 @@ def command_start(message):
                     "telegram_lastname": telegram_lastname
                 })
 
+                bot.send_message(
+                    chat_id=message.from_user.id,
+                    text="Благодарим за регистрацию! Ожидайте начала."
+                )
+
 
 @bot.message_handler(content_types=["text"], chat_types=["private"])
 def message_any(message):
