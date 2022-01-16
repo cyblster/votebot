@@ -142,6 +142,11 @@ def message_any(message):
                 with connection.cursor() as cursor:
                     cursor.execute(f"UPDATE `system` SET question = {message.text}")
 
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text="Успешно!"
+            )
+
         elif setting_answer_a_is_active:
             with pymysql.connect(
                     host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
