@@ -38,8 +38,8 @@ settings_inline_keyboard.add(types.InlineKeyboardButton(text="Назад", callb
 
 member_inline_keyboard = types.InlineKeyboardMarkup()
 member_inline_keyboard.add(
-    types.InlineKeyboardButton(text="Вариант А", callback_data="answer_a"),
-    types.InlineKeyboardButton(text="Вариант Б", callback_data="answer_b"),
+    types.InlineKeyboardButton(text="Вариант А", callback_data="vote_answer_a"),
+    types.InlineKeyboardButton(text="Вариант Б", callback_data="vote_answer_b"),
 )
 member_inline_keyboard.add(types.InlineKeyboardButton(text="Результаты", url=APP_URL, callback_data="vote_result"))
 
@@ -126,46 +126,38 @@ def command_start(message):
         pass
 
 
-@bot.callback_query_handler(lambda call: call.data == "refresh")
-def handler_refresh(call):
-    pass
+@bot.callback_query_handler(lambda call: True)
+def handler_query(call):
+    if call.data == "settings":
+        bot.edit_message_text(
+            chat_id=call.from_user.id,
+            message_id=call.message.message_id,
+            text=SETTINGS_TEXT,
+            parse_mode="HTML",
+            reply_markup=settings_inline_keyboard
+        )
 
+    elif call.data == "vote_start":
+        pass
 
-@bot.callback_query_handler(lambda call: call.data == "settings")
-def handler_settings(call):
-    bot.edit_message_text(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        text=SETTINGS_TEXT,
-        parse_mode="HTML",
-        reply_markup=settings_inline_keyboard
-    )
+    elif call.data == "back":
+        with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM `system`")
+                fetch = cursor.fetchall()
 
-
-@bot.callback_query_handler(lambda call: call.data == "vote_start")
-def handler_vote_start(call):
-    pass
-
-
-@bot.callback_query_handler(lambda call: call.data == "back")
-def handler_vote_start(call):
-    with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM `system`")
-            fetch = cursor.fetchall()
-
-            question, answer_a, answer_b, is_active = fetch[0][1:5]
-            bot.send_message(
-                chat_id=call.from_user.id,
-                text=MENU_TEXT.format(
-                    question=question,
-                    answer_a=answer_a,
-                    answer_b=answer_b,
-                    is_active="Да" if is_active else "Нет"
-                ),
-                parse_mode="HTML",
-                reply_markup=owner_inline_keyboard,
-            )
+                question, answer_a, answer_b, is_active = fetch[0][1:5]
+                bot.send_message(
+                    chat_id=call.from_user.id,
+                    text=MENU_TEXT.format(
+                        question=question,
+                        answer_a=answer_a,
+                        answer_b=answer_b,
+                        is_active="Да" if is_active else "Нет"
+                    ),
+                    parse_mode="HTML",
+                    reply_markup=owner_inline_keyboard,
+                )
 
 
 if __name__ == "__main__":
