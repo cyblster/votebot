@@ -229,7 +229,10 @@ def handler_query(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=SETTINGS_TEXT.format(text="Выберите пункт, который хотите изменить:"),
+            text=SETTINGS_TEXT.format(
+                text="Выберите пункт, который хотите изменить:",
+                timestamp=datetime.now().strftime("%H:%M:%S")
+            ),
             parse_mode="HTML",
             reply_markup=settings_inline_keyboard
         )
