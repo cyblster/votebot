@@ -14,7 +14,7 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
-MENU_TEXT = "<b>[Меню]</b>\n\n" \
+MENU_TEXT = "<b>[Меню] ({timestamp})</b>\n\n" \
              "<b>Вопрос:</b> {question}\n" \
              "<b>Вариант А:</b> {answer_a}\n" \
              "<b>Вариант Б:</b> {answer_b}\n\n" \
@@ -107,6 +107,7 @@ def command_start(message):
                 bot.send_message(
                     chat_id=message.from_user.id,
                     text=MENU_TEXT.format(
+                        timestamp=datetime.now().strftime("d.m.Y H:M:S"),
                         question=question,
                         answer_a=answer_a,
                         answer_b=answer_b,
