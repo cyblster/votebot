@@ -113,7 +113,7 @@ def command_start(message):
                 cursor.execute("SELECT * FROM `system`")
                 fetch = cursor.fetchall()
 
-                question, answer_a, answer_b, is_active = fetch[0][1:5]
+                _id, question, answer_a, answer_b, is_active = fetch[0][:5]
                 bot.send_message(
                     chat_id=message.from_user.id,
                     text=MENU_TEXT.format(
