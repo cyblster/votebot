@@ -22,8 +22,8 @@ MENU_TEXT = "<b>[Меню] ({timestamp})</b>\n\n" \
              "<b>Вариант Б:</b> {answer_b}\n\n" \
              "<b>Активен:</b> {is_active}"
 
-SETTINGS_TEXT = "<b>[Настройки голосования]</b>\n\n" \
-                "Выберите пункт, который хотите изменить:"
+SETTINGS_TEXT = "<b>[Настройки голосования] ({timestamp})</b>\n\n" \
+                "{text}"
 
 setting_question_is_active = False
 setting_answer_a_is_active = False
@@ -147,6 +147,16 @@ def message_any(message):
                 with connection.cursor() as cursor:
                     cursor.execute(f"UPDATE `system` SET question = '{message.text}' WHERE id = '1'")
 
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text=SETTINGS_TEXT.format(
+                    timestamp=datetime.now().strftime("%H:%M:%S"),
+                    text="Текст вопроса был успешно изменен."
+                ),
+                parse_mode="HTML",
+                reply_markup=owner_inline_keyboard
+            )
+
         elif setting_answer_a_is_active:
             with pymysql.connect(
                     host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
@@ -155,6 +165,16 @@ def message_any(message):
                 with connection.cursor() as cursor:
                     cursor.execute(f"UPDATE `system` SET answer_a = '{message.text}' WHERE id = '1'")
 
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text=SETTINGS_TEXT.format(
+                    timestamp=datetime.now().strftime("%H:%M:%S"),
+                    text="Текст ответа А был успешно изменен."
+                ),
+                parse_mode="HTML",
+                reply_markup=owner_inline_keyboard
+            )
+
         elif setting_answer_b_is_active:
             with pymysql.connect(
                     host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
@@ -162,6 +182,16 @@ def message_any(message):
             ) as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(f"UPDATE `system` SET answer_b = '{message.text}' WHERE id = '1'")
+
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text=SETTINGS_TEXT.format(
+                    timestamp=datetime.now().strftime("%H:%M:%S"),
+                    text="Текст ответа Б был успешно изменен."
+                ),
+                parse_mode="HTML",
+                reply_markup=owner_inline_keyboard
+            )
 
 
 @bot.callback_query_handler(lambda call: True)
@@ -199,7 +229,7 @@ def handler_query(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=SETTINGS_TEXT,
+            text=SETTINGS_TEXT.format(text="Выберите пункт, который хотите изменить:"),
             parse_mode="HTML",
             reply_markup=settings_inline_keyboard
         )
@@ -209,9 +239,14 @@ def handler_query(call):
         setting_answer_a_is_active = False
         setting_answer_b_is_active = False
 
-        bot.send_message(
+        bot.edit_message_text(
             chat_id=call.from_user.id,
-            text="Напишите текст вопроса:"
+            message_id=call.message.message_id,
+            text=SETTINGS_TEXT.format(
+                timestamp=datetime.now().strftime("%H:%M:%S"),
+                text="Напишите текст вопроса:"
+            ),
+            parse_mode="HTML"
         )
 
     elif call.data == "settings_answer_a":
@@ -219,9 +254,14 @@ def handler_query(call):
         setting_answer_a_is_active = True
         setting_answer_b_is_active = False
 
-        bot.send_message(
+        bot.edit_message_text(
             chat_id=call.from_user.id,
-            text="Напишите текст ответа А:"
+            message_id=call.message.message_id,
+            text=SETTINGS_TEXT.format(
+                timestamp=datetime.now().strftime("%H:%M:%S"),
+                text="Напишите текст ответа А:"
+            ),
+            parse_mode="HTML"
         )
 
     elif call.data == "settings_answer_b":
@@ -229,9 +269,14 @@ def handler_query(call):
         setting_answer_a_is_active = False
         setting_answer_b_is_active = True
 
-        bot.send_message(
+        bot.edit_message_text(
             chat_id=call.from_user.id,
-            text="Напишите текст ответ Б:"
+            message_id=call.message.message_id,
+            text=SETTINGS_TEXT.format(
+                timestamp=datetime.now().strftime("%H:%M:%S"),
+                text="Напишите текст ответа Б:"
+            ),
+            parse_mode="HTML"
         )
 
     elif call.data == "vote_start":
