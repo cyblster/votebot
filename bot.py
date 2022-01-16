@@ -133,7 +133,22 @@ def command_start(message):
         )
 
     else:
-        pass
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(f"INSERT INTO `member` (`telegram_id`, `telegram_username`, "
+                               f"`telegram_firstname`, `telegram_lastname`) "
+                               f"VALUES ('{telegram_id}', '{telegram_username}', '{telegram_firstname}', "
+                               f"'{telegram_lastname}')")
+
+                member_list.append({
+                    "telegram_id": telegram_id,
+                    "telegram_username": telegram_username,
+                    "telegram_firstname": telegram_firstname,
+                    "telegram_lastname": telegram_lastname
+                })
 
 
 @bot.message_handler(content_types=["text"], chat_types=["private"])
