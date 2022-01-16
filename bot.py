@@ -14,21 +14,21 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
-OWNER_MENU_TEXT = "Время сейчас: {time_current}\n\n" \
-                  "Текущий вопрос: {question_current}\n\n" \
-                  "Голосование началось в: {time_start}\n" \
-                  "Голосование закончится в: {time_end}\n" \
-                  "Времени осталось: {time_left}\n"
+OWNER_MENU_TEXT = "Текущий вопрос: {question}\n" \
+                  "Вариант А: {answer_a}\n" \
+                  "Вариант Б: {answer_b}\n\n" \
+                  "Активен: {is_active}"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
-owner_inline_keyboard.add(types.InlineKeyboardButton(text="Выбрать вопрос", callback_data="vote_choose"))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Изменить вопрос", callback_data="vote_question"))
 
 member_inline_keyboard = types.InlineKeyboardMarkup()
 member_inline_keyboard.add(
     types.InlineKeyboardButton(text="Вариант А", callback_data="vote_a"),
-    types.InlineKeyboardButton(text="Вариант Б", callback_data="vote_b")
+    types.InlineKeyboardButton(text="Вариант Б", callback_data="vote_b"),
 )
+member_inline_keyboard.add(types.InlineKeyboardButton(text="Результаты", url=APP_URL, callback_data="vote_result"))
 
 owner_list = []
 with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
@@ -60,15 +60,18 @@ server = Flask(__name__)
 bot = TeleBot(token=APP_TOKEN)
 
 
-# flask
+# website
 # =================================================================================================================
 
-@server.route("/vote")
+@server.route("/")
 def vote_result():
     result = "<h1>Результаты</h1>"
 
     return result, 200
 
+
+# telegram
+# =================================================================================================================
 
 @server.route(f"/{APP_TOKEN}", methods=["POST"])
 def bot_webhook():
@@ -79,23 +82,25 @@ def bot_webhook():
     return "!", 200
 
 
-# telegram
-# =================================================================================================================
-
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
     if message.from_user.id in [owner["telegram_id"] for owner in owner_list]:
-        bot.send_message(
-            chat_id=message.from_user.id,
-            text=OWNER_MENU_TEXT.format(
-                time_current=datetime.now(tz=timezone(timedelta(hours=5))).strftime("%H:%M:%S"),
-                question_current=2,
-                time_start=3,
-                time_end=4,
-                time_left=5
-            ),
-            reply_markup=owner_inline_keyboard
-        )
+        with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM `system`")
+                fetch = cursor.fetchall()
+
+                question, answer_a, answer_b, is_active = fetch[0][:4]
+                bot.send_message(
+                    chat_id=message.from_user.id,
+                    text=OWNER_MENU_TEXT.format(
+                        question=question,
+                        answer_a=answer_a,
+                        answer_b=answer_b,
+                        is_active="Да" if is_active else "Нет"
+                    ),
+                    reply_markup=owner_inline_keyboard
+                )
 
     elif message.from_user.id in [member["telegram_id"] for member in member_list]:
         bot.send_message(
