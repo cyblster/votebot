@@ -171,6 +171,10 @@ def handler_query(call):
     global setting_answer_b_is_active
 
     if call.data in ["refresh", "back"]:
+        setting_question_is_active = False
+        setting_answer_a_is_active = False
+        setting_answer_b_is_active = False
+
         with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM `system`")
