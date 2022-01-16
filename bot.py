@@ -154,7 +154,7 @@ def message_any(message):
                     text="Текст вопроса был успешно изменен."
                 ),
                 parse_mode="HTML",
-                reply_markup=owner_inline_keyboard
+                reply_markup=settings_inline_keyboard
             )
 
         elif setting_answer_a_is_active:
@@ -172,7 +172,7 @@ def message_any(message):
                     text="Текст ответа А был успешно изменен."
                 ),
                 parse_mode="HTML",
-                reply_markup=owner_inline_keyboard
+                reply_markup=settings_inline_keyboard
             )
 
         elif setting_answer_b_is_active:
@@ -190,7 +190,7 @@ def message_any(message):
                     text="Текст ответа Б был успешно изменен."
                 ),
                 parse_mode="HTML",
-                reply_markup=owner_inline_keyboard
+                reply_markup=settings_inline_keyboard
             )
 
 
@@ -222,7 +222,7 @@ def handler_query(call):
                         is_active="Да" if is_active else "Нет"
                     ),
                     parse_mode="HTML",
-                    reply_markup=owner_inline_keyboard,
+                    reply_markup=owner_inline_keyboard
                 )
 
     elif call.data == "settings":
