@@ -99,7 +99,8 @@ def command_start(message):
                         answer_b=answer_b,
                         is_active="Да" if is_active else "Нет"
                     ),
-                    reply_markup=owner_inline_keyboard
+                    parse_mode="HTML",
+                    reply_markup=owner_inline_keyboard,
                 )
 
     elif message.from_user.id in [member["telegram_id"] for member in member_list]:
@@ -119,7 +120,6 @@ def handler_query(call):
         message_id=call.message.message_id,
         text="Вы начали голосование",
         reply_markup=owner_inline_keyboard,
-        parse_mode="HTML"
     )
 
     for owner in owner_list:
