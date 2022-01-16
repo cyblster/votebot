@@ -140,6 +140,7 @@ def handler_query(call):
                     chat_id=call.from_user.id,
                     message_id=call.message.message_id,
                     text=MENU_TEXT.format(
+                        timestamp=datetime.now().strftime("d.m.Y H:M:S"),
                         question=question,
                         answer_a=answer_a,
                         answer_b=answer_b,
