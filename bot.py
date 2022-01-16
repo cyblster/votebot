@@ -147,8 +147,9 @@ def handler_query(call):
                 fetch = cursor.fetchall()
 
                 question, answer_a, answer_b, is_active = fetch[0][1:5]
-                bot.send_message(
+                bot.edit_message_text(
                     chat_id=call.from_user.id,
+                    message_id=call.message.message_id,
                     text=MENU_TEXT.format(
                         question=question,
                         answer_a=answer_a,
