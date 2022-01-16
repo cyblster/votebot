@@ -108,9 +108,9 @@ def command_start(message):
                     chat_id=message.from_user.id,
                     text=MENU_TEXT.format(
                         timestamp=datetime.now().strftime("%H:%M:%S"),
-                        question=question,
-                        answer_a=answer_a,
-                        answer_b=answer_b,
+                        question=question if question else "Отсутствует",
+                        answer_a=answer_a if answer_a else "Отсутствует",
+                        answer_b=answer_b if answer_b else "Отсутствует",
                         is_active="Да" if is_active else "Нет"
                     ),
                     parse_mode="HTML",
@@ -141,9 +141,9 @@ def handler_query(call):
                     message_id=call.message.message_id,
                     text=MENU_TEXT.format(
                         timestamp=datetime.now().strftime("%H:%M:%S"),
-                        question=question,
-                        answer_a=answer_a,
-                        answer_b=answer_b,
+                        question=question if question else "Отсутствует",
+                        answer_a=answer_a if answer_a else "Отсутствует",
+                        answer_b=answer_b if answer_b else "Отсутствует",
                         is_active="Да" if is_active else "Нет"
                     ),
                     parse_mode="HTML",
