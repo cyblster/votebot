@@ -118,7 +118,8 @@ def handler_query(call):
         chat_id=call.message.from_user.id,
         message_id=call.message.message_id,
         text="Вы начали голосование",
-        reply_markup=owner_inline_keyboard
+        reply_markup=owner_inline_keyboard,
+        parse_mode="HTML"
     )
 
     for owner in owner_list:
