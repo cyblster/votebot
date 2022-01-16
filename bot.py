@@ -250,7 +250,7 @@ def handler_query(call):
                 text="Напишите текст вопроса:"
             ),
             parse_mode="HTML",
-            reply_markup=owner_inline_keyboard
+            reply_markup=settings_inline_keyboard
         )
 
     elif call.data == "settings_answer_a":
@@ -266,7 +266,7 @@ def handler_query(call):
                 text="Напишите текст ответа А:"
             ),
             parse_mode="HTML",
-            reply_markup=owner_inline_keyboard
+            reply_markup=settings_inline_keyboard
         )
 
     elif call.data == "settings_answer_b":
@@ -282,7 +282,7 @@ def handler_query(call):
                 text="Напишите текст ответа Б:"
             ),
             parse_mode="HTML",
-            reply_markup=owner_inline_keyboard
+            reply_markup=settings_inline_keyboard
         )
 
     elif call.data == "vote_start":
