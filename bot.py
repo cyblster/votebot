@@ -14,10 +14,10 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
-OWNER_MENU_TEXT = "Текущий вопрос: {question}\n" \
-                  "Вариант А: {answer_a}\n" \
-                  "Вариант Б: {answer_b}\n\n" \
-                  "Активен: {is_active}"
+OWNER_MENU_TEXT = "<b>Вопрос:</b> {question}\n" \
+                  "<b>Вариант А:</b> {answer_a}\n" \
+                  "<b>Вариант Б:</b> {answer_b}\n\n" \
+                  "<b>Активен:</b> {is_active}"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
@@ -90,7 +90,7 @@ def command_start(message):
                 cursor.execute("SELECT * FROM `system`")
                 fetch = cursor.fetchall()
 
-                question, answer_a, answer_b, is_active = fetch[0][:4]
+                question, answer_a, answer_b, is_active = fetch[0][1:5]
                 bot.send_message(
                     chat_id=message.from_user.id,
                     text=OWNER_MENU_TEXT.format(
