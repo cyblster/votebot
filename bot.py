@@ -133,36 +133,37 @@ def command_start(message):
 
 @bot.message_handler(content_types=["text"], chat_types=["private"])
 def message_any(message):
-    if setting_question_is_active:
-        with pymysql.connect(
-                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
-                db=MYSQL_DATABASE, autocommit=True
-        ) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(f"UPDATE `system` SET question = {message.text}")
+    if message.from_user.id in [owner["telegram_id"] for owner in owner_list]:
+        if setting_question_is_active:
+            with pymysql.connect(
+                    host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                    db=MYSQL_DATABASE, autocommit=True
+            ) as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(f"UPDATE `system` SET question = {message.text}")
 
-    elif setting_answer_a_is_active:
-        with pymysql.connect(
-                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
-                db=MYSQL_DATABASE, autocommit=True
-        ) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(f"UPDATE `system` SET answer_a = {message.text}")
+        elif setting_answer_a_is_active:
+            with pymysql.connect(
+                    host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                    db=MYSQL_DATABASE, autocommit=True
+            ) as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(f"UPDATE `system` SET answer_a = {message.text}")
 
-    elif setting_answer_b_is_active:
-        with pymysql.connect(
-                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
-                db=MYSQL_DATABASE, autocommit=True
-        ) as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(f"UPDATE `system` SET answer_b = {message.text}")
+        elif setting_answer_b_is_active:
+            with pymysql.connect(
+                    host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                    db=MYSQL_DATABASE, autocommit=True
+            ) as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(f"UPDATE `system` SET answer_b = {message.text}")
 
 
 @bot.callback_query_handler(lambda call: True)
 def handler_query(call):
-    setting_question_is_active = False
-    setting_answer_a_is_active = False
-    setting_answer_b_is_active = False
+    global setting_question_is_active
+    global setting_answer_a_is_active
+    global setting_answer_b_is_active
 
     if call.data in ["refresh", "back"]:
         with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
