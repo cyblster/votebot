@@ -23,6 +23,10 @@ MENU_TEXT = "<b>[Меню] ({timestamp})</b>\n\n" \
 SETTINGS_TEXT = "<b>[Настройки голосования]</b>\n\n" \
                 "Выберите пункт, который хотите изменить:"
 
+setting_question_is_active = False
+setting_answer_a_is_active = False
+setting_answer_b_is_active = False
+
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Обновить", callback_data="refresh"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Настройки голосования", callback_data="settings"))
@@ -127,8 +131,39 @@ def command_start(message):
         pass
 
 
+@bot.message_handler(content_types=["text"], chat_types=["private"])
+def message_any(message):
+    if setting_question_is_active:
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(f"UPDATE `system` SET question = {message.text}")
+
+    elif setting_answer_a_is_active:
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(f"UPDATE `system` SET answer_a = {message.text}")
+
+    elif setting_answer_b_is_active:
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(f"UPDATE `system` SET answer_b = {message.text}")
+
+
 @bot.callback_query_handler(lambda call: True)
 def handler_query(call):
+    setting_question_is_active = False
+    setting_answer_a_is_active = False
+    setting_answer_b_is_active = False
+
     if call.data in ["refresh", "back"]:
         with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
             with connection.cursor() as cursor:
@@ -157,6 +192,36 @@ def handler_query(call):
             text=SETTINGS_TEXT,
             parse_mode="HTML",
             reply_markup=settings_inline_keyboard
+        )
+
+    elif call.data == "settings_question":
+        setting_question_is_active = True
+        setting_answer_a_is_active = False
+        setting_answer_b_is_active = False
+
+        bot.send_message(
+            chat_id=call.data.from_user.id,
+            text="Напишите текст вопроса:"
+        )
+
+    elif call.data == "settings_answer_a":
+        setting_question_is_active = False
+        setting_answer_a_is_active = True
+        setting_answer_b_is_active = False
+
+        bot.send_message(
+            chat_id=call.data.from_user.id,
+            text="Напишите текст ответа А:"
+        )
+
+    elif call.data == "settings_answer_b":
+        setting_question_is_active = False
+        setting_answer_a_is_active = False
+        setting_answer_b_is_active = True
+
+        bot.send_message(
+            chat_id=call.data.from_user.id,
+            text="Напишите текст ответ Б:"
         )
 
     elif call.data == "vote_start":
