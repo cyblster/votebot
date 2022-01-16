@@ -134,9 +134,23 @@ def command_start(message):
 
     else:
         telegram_id = message.from_user.id
-        telegram_username = message.from_user.id if message.from_user.id else "NULL"
-        telegram_firstname = message.from_user.firstname if message.from_user.firstname else "NULL"
-        telegram_lastname = message.from_user.lastname if message.from_user.lastname else "NULL"
+        telegram_username = message.from_user.id
+        telegram_firstname = message.from_user.first_name
+        telegram_lastname = message.from_user.last_name
+
+        member_list.append({
+            "telegram_id": telegram_id,
+            "telegram_username": telegram_username,
+            "telegram_firstname": telegram_firstname,
+            "telegram_lastname": telegram_lastname
+        })
+
+        if not telegram_username:
+            telegram_username = "NULL"
+        if not telegram_firstname:
+            telegram_firstname = "NULL"
+        if not telegram_lastname:
+            telegram_lastname = "NULL"
 
         with pymysql.connect(
                 host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
@@ -147,13 +161,6 @@ def command_start(message):
                                f"`telegram_firstname`, `telegram_lastname`) "
                                f"VALUES ('{telegram_id}', '{telegram_username}', '{telegram_firstname}', "
                                f"'{telegram_lastname}')")
-
-        member_list.append({
-            "telegram_id": telegram_id,
-            "telegram_username": telegram_username,
-            "telegram_firstname": telegram_firstname,
-            "telegram_lastname": telegram_lastname
-        })
 
         bot.send_message(
             chat_id=message.from_user.id,
