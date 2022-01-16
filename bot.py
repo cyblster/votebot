@@ -128,19 +128,7 @@ def command_start(message):
 
 @bot.callback_query_handler(lambda call: True)
 def handler_query(call):
-    if call.data == "settings":
-        bot.edit_message_text(
-            chat_id=call.from_user.id,
-            message_id=call.message.message_id,
-            text=SETTINGS_TEXT,
-            parse_mode="HTML",
-            reply_markup=settings_inline_keyboard
-        )
-
-    elif call.data == "vote_start":
-        pass
-
-    elif call.data == "back":
+    if call.data in ["refresh", "back"]:
         with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM `system`")
@@ -159,6 +147,18 @@ def handler_query(call):
                     parse_mode="HTML",
                     reply_markup=owner_inline_keyboard,
                 )
+
+    elif call.data == "settings":
+        bot.edit_message_text(
+            chat_id=call.from_user.id,
+            message_id=call.message.message_id,
+            text=SETTINGS_TEXT,
+            parse_mode="HTML",
+            reply_markup=settings_inline_keyboard
+        )
+
+    elif call.data == "vote_start":
+        pass
 
 
 if __name__ == "__main__":
