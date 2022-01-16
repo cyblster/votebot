@@ -101,7 +101,7 @@ def bot_webhook():
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
-    print(1)
+    print(message.from_user.id in [owner["telegram_id"] for owner in owner_list])
     if message.from_user.id in [owner["telegram_id"] for owner in owner_list]:
         with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
             with connection.cursor() as cursor:
