@@ -200,7 +200,7 @@ def handler_query(call):
         setting_answer_b_is_active = False
 
         bot.send_message(
-            chat_id=call.data.from_user.id,
+            chat_id=call.from_user.id,
             text="Напишите текст вопроса:"
         )
 
@@ -210,7 +210,7 @@ def handler_query(call):
         setting_answer_b_is_active = False
 
         bot.send_message(
-            chat_id=call.data.from_user.id,
+            chat_id=call.from_user.id,
             text="Напишите текст ответа А:"
         )
 
@@ -220,7 +220,7 @@ def handler_query(call):
         setting_answer_b_is_active = True
 
         bot.send_message(
-            chat_id=call.data.from_user.id,
+            chat_id=call.from_user.id,
             text="Напишите текст ответ Б:"
         )
 
