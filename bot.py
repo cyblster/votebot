@@ -106,7 +106,6 @@ def bot_webhook():
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
-    print(message.from_user.id in [owner["telegram_id"] for owner in owner_list])
     if message.from_user.id in [owner["telegram_id"] for owner in owner_list]:
         with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
             with connection.cursor() as cursor:
@@ -146,7 +145,7 @@ def message_any(message):
                     db=MYSQL_DATABASE, autocommit=True
             ) as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(f"UPDATE `system` SET question = {message.text} WHERE id = 1")
+                    cursor.execute(f"UPDATE `system` SET question = {message.text} WHERE id = '1'")
 
         elif setting_answer_a_is_active:
             with pymysql.connect(
@@ -154,7 +153,7 @@ def message_any(message):
                     db=MYSQL_DATABASE, autocommit=True
             ) as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(f"UPDATE `system` SET answer_a = {message.text} WHERE id = 1")
+                    cursor.execute(f"UPDATE `system` SET answer_a = {message.text} WHERE id = '1'")
 
         elif setting_answer_b_is_active:
             with pymysql.connect(
@@ -162,7 +161,7 @@ def message_any(message):
                     db=MYSQL_DATABASE, autocommit=True
             ) as connection:
                 with connection.cursor() as cursor:
-                    cursor.execute(f"UPDATE `system` SET answer_b = {message.text} WHERE id = 1")
+                    cursor.execute(f"UPDATE `system` SET answer_b = {message.text} WHERE id = '1'")
 
 
 @bot.callback_query_handler(lambda call: True)
