@@ -151,7 +151,8 @@ def message_any(message):
                 chat_id=message.from_user.id,
                 text=SETTINGS_TEXT.format(
                     timestamp=datetime.now().strftime("%H:%M:%S"),
-                    text="Текст вопроса был успешно изменен."
+                    text="Текст вопроса был успешно изменен.\n\n"
+                         "Выберите пункт, который хотите изменить:"
                 ),
                 parse_mode="HTML",
                 reply_markup=settings_inline_keyboard
@@ -169,7 +170,8 @@ def message_any(message):
                 chat_id=message.from_user.id,
                 text=SETTINGS_TEXT.format(
                     timestamp=datetime.now().strftime("%H:%M:%S"),
-                    text="Текст ответа А был успешно изменен."
+                    text="Текст ответа А был успешно изменен.\n\n"
+                         "Выберите пункт, который хотите изменить:"
                 ),
                 parse_mode="HTML",
                 reply_markup=settings_inline_keyboard
@@ -187,7 +189,8 @@ def message_any(message):
                 chat_id=message.from_user.id,
                 text=SETTINGS_TEXT.format(
                     timestamp=datetime.now().strftime("%H:%M:%S"),
-                    text="Текст ответа Б был успешно изменен."
+                    text="Текст ответа Б был успешно изменен.\n\n"
+                         "Выберите пункт, который хотите изменить:"
                 ),
                 parse_mode="HTML",
                 reply_markup=settings_inline_keyboard
