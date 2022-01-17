@@ -443,7 +443,10 @@ def handler_query(call):
                     cursor.execute(f"SELECT is_vote FROM member WHERE telegram_id = {call.from_user.id}")
                     is_vote = cursor.fetchone()[0]
 
+                    print(is_vote)
+
                     if not is_vote:
+                        print(123)
                         cursor.execute("UPDATE `system` SET result_b = result_b + 1 WHERE id = 1")
                         bot.send_message(
                             chat_id=call.from_user.id,
