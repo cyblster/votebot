@@ -166,7 +166,7 @@ def message_any(message):
 
         bot.send_message(
             chat_id=message.from_user.id,
-            text=settings_text.format(question, answer1, answer2, is_active),
+            text=settings_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=settings_inline_keyboard
         )
