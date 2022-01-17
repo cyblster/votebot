@@ -140,11 +140,6 @@ def message_any(message):
     global setting_answer1_is_active
     global setting_answer2_is_active
 
-    question, answer1, answer2, is_active = mysql_execute(
-        mysql_host, mysql_user, mysql_passwd, mysql_db,
-        query=f"SELECT * FROM system"
-    )[1:]
-
     if setting_question_is_active:
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
@@ -164,9 +159,16 @@ def message_any(message):
         )
 
     if setting_question_is_active or setting_answer1_is_active or setting_answer2_is_active:
+        question, answer1, answer2, is_active = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT * FROM system"
+        )[1:]
+
         bot.send_message(
             chat_id=message.from_user.id,
-            text=settings_text.format(question, answer1, answer2, is_active)
+            text=settings_text.format(question, answer1, answer2, is_active),
+            parse_mode="HTML",
+            reply_markup=settings_inline_keyboard
         )
 
     setting_question_is_active = False
