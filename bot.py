@@ -130,6 +130,10 @@ def command_start(message):
 
 @bot.message_handler(content_types=["text"], chat_types=["private"])
 def message_any(message):
+    global setting_question_is_active
+    global setting_answer1_is_active
+    global setting_answer2_is_active
+
     if setting_question_is_active:
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
@@ -147,6 +151,10 @@ def message_any(message):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"UPDATE system SET answer2 = {message.text} WHERE id = 1"
         )
+
+    setting_question_is_active = False
+    setting_answer1_is_active = False
+    setting_answer2_is_active = False
 
 
 @bot.callback_query_handler(lambda call: call.data.startswith("owner_"))
@@ -177,7 +185,7 @@ def keyboard_owner(call):
             )
 
         bot.edit_message_text(
-            chat_id=call.id,
+            chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
@@ -208,7 +216,7 @@ def keyboard_owner(call):
         )
 
         bot.edit_message_text(
-            chat_id=call.id,
+            chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
@@ -265,7 +273,7 @@ def keyboard_settings(call):
         setting_answer2_is_active = False
         
         bot.edit_message_text(
-            chat_id=call.id,
+            chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
@@ -273,7 +281,7 @@ def keyboard_settings(call):
         )
 
     bot.edit_message_text(
-        chat_id=call.id,
+        chat_id=call.from_user.id,
         message_id=call.message.message_id,
         text=settings_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
         parse_mode="HTML",
