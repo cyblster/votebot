@@ -22,7 +22,7 @@ settings_text = "<b>[Параметры голосования]</b>\n\n" \
                 "<b>Вопрос:</b>\n{}\n\n" \
                 "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
                 "<b>Голосование активно:</b> {}\n\n" \
-                "Выбкрите параметр для редактирования:"
+                "Выберите параметр для редактирования:"
 
 member_text = "<b>[Голосование]</b>\n\n" \
               "<b>Вопрос:</b>\n{}\n\n" \
@@ -31,7 +31,7 @@ member_text = "<b>[Голосование]</b>\n\n" \
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Параметры голосования", callback_data="owner_settings"))
-owner_inline_keyboard.add(types.InlineKeyboardButton(text="Закончить голосвание", callback_data="owner_end"))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Закончить голосование", callback_data="owner_end"))
 
 settings_inline_keyboard = types.InlineKeyboardMarkup()
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сменить вопрос", callback_data="settings_question"))
@@ -159,8 +159,6 @@ def keyboard_owner(call):
                 reply_markup=member_inline_keyboard
             )
 
-        bot.answer_callback_query(call.id)
-
     elif call.data == "owner_settings":
         _id, question, answer1, answer2, is_active = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
@@ -169,13 +167,29 @@ def keyboard_owner(call):
 
         bot.send_message(
             chat_id=call.from_user.id,
-            text=settings_text.format(question, answer1, answer2, is_active),
+            text=settings_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=settings_inline_keyboard
         )
 
     elif call.data == "owner_end":
-        pass
+        is_active = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT is_active FROM system"
+        )[0]
+
+        if not is_active:
+            return
+
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="UPDATE system SET is_active = 0 WHERE id = 1"
+        )
+
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="TRUNCATE TABLE member"
+        )
 
     bot.answer_callback_query(call.id)
 
