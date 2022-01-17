@@ -396,7 +396,7 @@ def handler_query(call):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM `system`")
                 fetch = cursor.fetchall()
-                is_active, result_a, result_b = fetch[0][5:8]
+                is_active, result_a, result_b = fetch[0][4:7]
 
                 if is_active:
                     cursor.execute(f"SELECT is_vote FROM member WHERE telegram_id = {call.from_user.id}")
@@ -437,7 +437,7 @@ def handler_query(call):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM `system`")
                 fetch = cursor.fetchall()
-                is_active, result_a, result_b = fetch[0][5:8]
+                is_active, result_a, result_b = fetch[0][4:7]
 
                 if is_active:
                     cursor.execute(f"SELECT is_vote FROM member WHERE telegram_id = {call.from_user.id}")
