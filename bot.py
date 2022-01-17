@@ -14,7 +14,7 @@ mysql_user = environ.get("mysql_user")
 mysql_passwd = environ.get("mysql_password")
 mysql_db = environ.get("mysql_database")
 
-owner_menu = "<b>[Меню]</b>\n\n" \
+owner_menu_text = "<b>[Меню]</b>\n\n" \
              "Вопрос: {}\n" \
              "Ответ А: {}\n" \
              "Ответ Б: {}\n\n" \
@@ -91,7 +91,7 @@ def command_start(message):
 
         bot.send_message(
             chat_id=message.from_user.id,
-            text=owner_menu.format(question, answer1, answer2, is_active),
+            text=owner_menu_text.format(question, answer1, answer2, is_active),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
