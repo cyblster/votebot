@@ -2,7 +2,6 @@ import os
 import telebot
 import pymysql
 import logging
-import requests
 
 from flask import Flask, request
 from telebot import types
