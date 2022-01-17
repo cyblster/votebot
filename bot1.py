@@ -1,3 +1,4 @@
+import logging
 from os import environ
 
 import pymysql.cursors
@@ -45,6 +46,8 @@ setting_answer_b_is_active = False
 
 server = Flask(__name__)
 bot = TeleBot(app_token)
+
+logger.setLevel(logging.DEBUG)
 
 
 def mysql_execute(host: str, user: str, passwd: str, db: str, query: str, autocommit=True) -> tuple:
