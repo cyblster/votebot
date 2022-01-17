@@ -96,7 +96,7 @@ def vote_result():
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM `owner`")
             for fetch in cursor.fetchall():
-                is_active, result_a, result_b = fetch[0][5:8]
+                is_active, result_a, result_b = fetch[0][4:7]
 
                 if is_active:
                     return f"<h1>Голосование началось!</h1><br>Вариант А = {result_a}<br>Вариант Б = {result_b}", 200
