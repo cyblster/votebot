@@ -15,10 +15,10 @@ mysql_passwd = environ.get("mysql_password")
 mysql_db = environ.get("mysql_database")
 
 owner_menu = "<b>[Меню]</b>\n\n" \
-             "Вопрос: {question}\n" \
-             "Ответ А: {answer1}\n" \
-             "Ответ Б: {answer2}\n\n" \
-             "Активно: {is_active}"
+             "Вопрос: {}\n" \
+             "Ответ А: {}\n" \
+             "Ответ Б: {}\n\n" \
+             "Активно: {}"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
