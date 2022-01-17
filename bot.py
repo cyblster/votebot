@@ -2,10 +2,10 @@ import os
 import telebot
 import pymysql
 import logging
+import requests
 
 from flask import Flask, request
 from telebot import types
-from datetime import datetime, timedelta, timezone
 
 
 APP_URL = os.environ.get("app_url")
@@ -92,9 +92,17 @@ logger.setLevel(logging.DEBUG)
 
 @server.route("/")
 def vote_result():
-    result = "<h1>Результаты</h1>"
+    with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM `owner`")
+            for fetch in cursor.fetchall():
+                is_active, result_a, result_b = fetch[0][5:8]
 
-    return result, 200
+                if is_active:
+                    return f"<h1>Голосование началось!</h1><br>Вариант А = {result_a}<br>Вариант Б = {result_b}", 200
+
+                else:
+                    return "Голосвание еще не началось! Пожалуйста, ожидайте.", 200
 
 
 # telegram
@@ -117,13 +125,11 @@ def command_start(message):
                 cursor.execute("SELECT * FROM `system`")
                 fetch = cursor.fetchall()
 
-                _id, question, answer_a, answer_b, is_active = fetch[0][:5]
+                question, answer_a, answer_b, is_active = fetch[0][1:5]
                 bot.send_message(
                     chat_id=message.from_user.id,
                     text=MENU_TEXT.format(
-                        question=question if question else "Отсутствует",
-                        answer_a=answer_a if answer_a else "Отсутствует",
-                        answer_b=answer_b if answer_b else "Отсутствует",
+                        question=question, answer_a=answer_a, answer_b=answer_b,
                         is_active="Да" if is_active else "Нет"
                     ),
                     parse_mode="HTML",
@@ -251,9 +257,7 @@ def handler_query(call):
                     chat_id=call.from_user.id,
                     message_id=call.message.message_id,
                     text=MENU_TEXT.format(
-                        question=question if question else "Отсутствует",
-                        answer_a=answer_a if answer_a else "Отсутствует",
-                        answer_b=answer_b if answer_b else "Отсутствует",
+                        question=question, answer_a=answer_a, answer_b=answer_b,
                         is_active="Да" if is_active else "Нет"
                     ),
                     parse_mode="HTML",
@@ -330,11 +334,7 @@ def handler_query(call):
                     for telegram_id in [member["telegram_id"] for member in member_list]:
                         bot.send_message(
                             chat_id=telegram_id,
-                            text=MEMBER_TEXT.format(
-                                question=question,
-                                answer_a=answer_a,
-                                answer_b=answer_b
-                            ),
+                            text=MEMBER_TEXT.format(question=question),
                             parse_mode="HTML",
                             reply_markup=member_inline_keyboard
                         )
@@ -346,10 +346,8 @@ def handler_query(call):
                         chat_id=call.from_user.id,
                         message_id=call.message.message_id,
                         text=MENU_TEXT.format(
-                            question=question,
-                            answer_a=answer_a,
-                            answer_b=answer_b,
-                            is_active=is_active
+                            question=question, answer_a=answer_a, answer_b=answer_b,
+                            is_active="Да" if is_active else "Нет"
                         ),
                         parse_mode="HTML",
                         reply_markup=owner_inline_keyboard
@@ -379,13 +377,93 @@ def handler_query(call):
                         chat_id=call.from_user.id,
                         message_id=call.message.message_id,
                         text=MENU_TEXT.format(
-                            question=question,
-                            answer_a=answer_a,
-                            answer_b=answer_b,
-                            is_active=is_active
+                            question=question, answer_a=answer_a, answer_b=answer_b,
+                            is_active="Да" if is_active else "Нет"
                         ),
                         parse_mode="HTML",
                         reply_markup=owner_inline_keyboard
+                    )
+
+    elif call.data == "answer_a":
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM `system`")
+                fetch = cursor.fetchall()
+                is_active, result_a, result_b = fetch[0][5:8]
+
+                if is_active:
+                    cursor.execute(f"SELECT is_vote FROM member WHERE telegram_id = {call.from_user.id}")
+                    is_vote = cursor.fetchone()[0]
+
+                    if not is_vote:
+                        cursor.execute("UPDATE `system` SET result_a = result_a + 1 WHERE id = 1")
+                        bot.send_message(
+                            chat_id=call.from_user.id,
+                            text="Ваш голос учтен! Ожидайте завершения голосования.",
+                            reply_markup=types.InlineKeyboardMarkup(
+                                types.InlineKeyboardButton(
+                                    text="Результаты голосования",
+                                    url=APP_URL
+                                )
+                            )
+                        )
+
+                        cursor.execute(f"UPDATE `member` SET is_vote = 1 WHERE telegram_id = {call.from_user.id}")
+
+                    else:
+                        bot.send_message(
+                            chat_id=call.from_user.id,
+                            text="Ваш голос уже был учтен! Ожидайте завершения голосования."
+                        )
+
+                else:
+                    bot.send_message(
+                        chat_id=call.from_user.id,
+                        text="Голосование еще не началось! Пожалуйста, ожидайте."
+                    )
+
+    elif call.data == "answer_b":
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM `system`")
+                fetch = cursor.fetchall()
+                is_active, result_a, result_b = fetch[0][5:8]
+
+                if is_active:
+                    cursor.execute(f"SELECT is_vote FROM member WHERE telegram_id = {call.from_user.id}")
+                    is_vote = cursor.fetchone()[0]
+
+                    if not is_vote:
+                        cursor.execute("UPDATE `system` SET result_b = result_b + 1 WHERE id = 1")
+                        bot.send_message(
+                            chat_id=call.from_user.id,
+                            text="Ваш голос учтен! Ожидайте завершения голосования.",
+                            reply_markup=types.InlineKeyboardMarkup(
+                                types.InlineKeyboardButton(
+                                    text="Результаты голосования",
+                                    url=APP_URL
+                                )
+                            )
+                        )
+
+                        cursor.execute(f"UPDATE `member` SET is_vote = 1 WHERE telegram_id = {call.from_user.id}")
+
+                    else:
+                        bot.send_message(
+                            chat_id=call.from_user.id,
+                            text="Ваш голос уже был учтен! Ожидайте завершения голосования."
+                        )
+
+                else:
+                    bot.send_message(
+                        chat_id=call.from_user.id,
+                        text="Голосование еще не началось! Пожалуйста, ожидайте."
                     )
 
 
