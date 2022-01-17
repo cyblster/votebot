@@ -210,12 +210,13 @@ def keyboard_owner(call):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="SELECT telegram_id FROM member"
         ):
-            bot.send_message(
-                chat_id=telegram_id,
-                text=member_text.format(question, answer1, answer2),
-                parse_mode="HTML",
-                reply_markup=member_inline_keyboard
-            )
+            if telegram_id:
+                bot.send_message(
+                    chat_id=telegram_id,
+                    text=member_text.format(question, answer1, answer2),
+                    parse_mode="HTML",
+                    reply_markup=member_inline_keyboard
+                )
 
         bot.edit_message_text(
             chat_id=call.from_user.id,
