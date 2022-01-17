@@ -117,6 +117,19 @@ def command_start(message):
         )
 
     else:
+        is_active = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT is_active FROM system"
+        )[0]
+
+        if is_active:
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text="Голосование уже началось. Ожидайте завершения голосования."
+            )
+
+            return
+
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"INSERT INTO member (telegram_id) VALUES ({message.from_user.id})"
