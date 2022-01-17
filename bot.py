@@ -334,7 +334,11 @@ def handler_query(call):
                     for telegram_id in [member["telegram_id"] for member in member_list]:
                         bot.send_message(
                             chat_id=telegram_id,
-                            text=MEMBER_TEXT.format(question=question),
+                            text=MEMBER_TEXT.format(
+                                question=question,
+                                answer_a=answer_a,
+                                answer_b=answer_b
+                            ),
                             parse_mode="HTML",
                             reply_markup=member_inline_keyboard
                         )
