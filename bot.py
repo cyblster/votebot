@@ -16,7 +16,7 @@ mysql_db = environ.get("mysql_database")
 owner_menu_text = "<b>[Меню]</b>\n\n" \
                   "<b>Вопрос:</b>\n{}\n\n" \
                   "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
-                  "<b>Голосование активно:</b> {}"
+                  "<b>Голосование запущено:</b> {}"
 
 settings_text = "<b>[Параметры голосования]</b>\n\n" \
                 "<b>Вопрос:</b>\n{}\n\n" \
@@ -224,6 +224,11 @@ def keyboard_member(call):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"UPDATE member SET answer = 2 WHERE telegram_id = {call.from_user.id}"
         )
+
+    bot.send_message(
+        chat_id=call.from_user.id,
+        text="Ваш голос учтен. Ожидайте завершения голосования."
+    )
 
     bot.answer_callback_query(call.id)
 
