@@ -14,22 +14,19 @@ mysql_passwd = environ.get("mysql_password")
 mysql_db = environ.get("mysql_database")
 
 owner_menu_text = "<b>[Меню]</b>\n\n" \
-                  "Вопрос: {}\n" \
-                  "Ответ А: {}\n" \
-                  "Ответ Б: {}\n\n" \
-                  "Активно: {}"
+                  "<b>Вопрос:</b>\n{}\n\n" \
+                  "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
+                  "<b>Голосование активно:</b> {}"
 
 settings_text = "<b>[Параметры голосования]</b>\n\n" \
-                "Вопрос: {}\n" \
-                "Ответ А: {}\n" \
-                "Ответ Б: {}\n\n" \
-                "Активно: {}\n\n" \
-                "Выберите параметр для редактирования:"
+                "<b>Вопрос:</b>\n{}\n\n" \
+                "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
+                "<b>Голосование активно:</b> {}\n\n" \
+                "Выбкрите параметр для редактирования:"
 
-member_text = "[Голосование]\n\n" \
-              "{}\n" \
-              "А){}\n" \
-              "Б){}"
+member_text = "<b>[Голосование]</b>\n\n" \
+              "<b>Вопрос:</b>\n{}\n\n" \
+              "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
