@@ -254,7 +254,7 @@ def keyboard_owner(call):
             message_id=call.message.message_id,
             text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
-            reply_markup=settings_inline_keyboard
+            reply_markup=owner_inline_keyboard
         )
 
     bot.answer_callback_query(call.id)
