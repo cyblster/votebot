@@ -406,13 +406,7 @@ def handler_query(call):
                         cursor.execute("UPDATE `system` SET result_a = result_a + 1 WHERE id = 1")
                         bot.send_message(
                             chat_id=call.from_user.id,
-                            text="Ваш голос учтен! Ожидайте завершения голосования.",
-                            reply_markup=types.InlineKeyboardMarkup(
-                                types.InlineKeyboardButton(
-                                    text="Результаты голосования",
-                                    url=APP_URL
-                                )
-                            )
+                            text="Ваш голос учтен! Ожидайте завершения голосования."
                         )
 
                         cursor.execute(f"UPDATE `member` SET is_vote = 1 WHERE telegram_id = {call.from_user.id}")
@@ -447,13 +441,7 @@ def handler_query(call):
                         cursor.execute("UPDATE `system` SET result_b = result_b + 1 WHERE id = 1")
                         bot.send_message(
                             chat_id=call.from_user.id,
-                            text="Ваш голос учтен! Ожидайте завершения голосования.",
-                            reply_markup=types.InlineKeyboardMarkup(
-                                types.InlineKeyboardButton(
-                                    text="Результаты голосования",
-                                    url=APP_URL
-                                )
-                            )
+                            text="Ваш голос учтен! Ожидайте завершения голосования."
                         )
 
                         cursor.execute(f"UPDATE `member` SET is_vote = 1 WHERE telegram_id = {call.from_user.id}")
