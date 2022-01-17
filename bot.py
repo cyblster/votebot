@@ -137,19 +137,19 @@ def message_any(message):
     if setting_question_is_active:
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query=f"UPDATE system SET question = {message.text} WHERE id = 1"
+            query=f"UPDATE system SET question = '{message.text}' WHERE id = 1"
         )
     
     elif setting_answer1_is_active:
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query=f"UPDATE system SET answer1 = {message.text} WHERE id = 1"
+            query=f"UPDATE system SET answer1 = '{message.text}' WHERE id = 1"
         )
     
     elif setting_answer2_is_active:
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query=f"UPDATE system SET answer2 = {message.text} WHERE id = 1"
+            query=f"UPDATE system SET answer2 = '{message.text}' WHERE id = 1"
         )
 
     setting_question_is_active = False
