@@ -35,9 +35,9 @@ setting_answer_a_is_active = False
 setting_answer_b_is_active = False
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
-owner_inline_keyboard.add(types.InlineKeyboardButton(text="Обновить", callback_data="refresh"))
-owner_inline_keyboard.add(types.InlineKeyboardButton(text="Настройки голосования", callback_data="settings"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="vote_start"))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Настройки голосования", callback_data="vote_settings"))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Завершить голосование", callback_data="vote_end"))
 
 settings_inline_keyboard = types.InlineKeyboardMarkup()
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Вопрос", callback_data="settings_question"))
@@ -236,7 +236,7 @@ def handler_query(call):
     global setting_answer_a_is_active
     global setting_answer_b_is_active
 
-    if call.data in ["refresh", "back"]:
+    if call.data == "back":
         setting_question_is_active = False
         setting_answer_a_is_active = False
         setting_answer_b_is_active = False
@@ -260,7 +260,7 @@ def handler_query(call):
                     reply_markup=owner_inline_keyboard
                 )
 
-    elif call.data == "settings":
+    elif call.data == "vote_settings":
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
@@ -317,22 +317,73 @@ def handler_query(call):
         )
 
     elif call.data == "vote_start":
-        with pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD, db=MYSQL_DATABASE) as connection:
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM `system`")
                 fetch = cursor.fetchall()
                 _id, question, answer_a, answer_b, is_active = fetch[0][:5]
 
-                for telegram_id in [member["telegram_id"] for member in member_list]:
-                    bot.send_message(
-                        chat_id=telegram_id,
-                        text=MEMBER_TEXT.format(
+                if not is_active:
+                    for telegram_id in [member["telegram_id"] for member in member_list]:
+                        bot.send_message(
+                            chat_id=telegram_id,
+                            text=MEMBER_TEXT.format(
+                                question=question,
+                                answer_a=answer_a,
+                                answer_b=answer_b
+                            ),
+                            parse_mode="HTML",
+                            reply_markup=member_inline_keyboard
+                        )
+
+                    is_active = 1
+                    cursor.execute(f"UPDATE `system` SET is_active = {is_active} WHERE id = 1")
+
+                    bot.edit_message_text(
+                        chat_id=call.from_user.id,
+                        message_id=call.message.message_id,
+                        text=MENU_TEXT.format(
                             question=question,
                             answer_a=answer_a,
                             answer_b=answer_b
                         ),
                         parse_mode="HTML",
-                        reply_markup=member_inline_keyboard
+                        reply_markup=owner_inline_keyboard
+                    )
+
+    elif call.data == "vote_end":
+        with pymysql.connect(
+                host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
+                db=MYSQL_DATABASE, autocommit=True
+        ) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM `system`")
+                fetch = cursor.fetchall()
+                _id, question, answer_a, answer_b, is_active = fetch[0][:5]
+
+                if is_active:
+                    for telegram_id in [member["telegram_id"] for member in member_list]:
+                        bot.send_message(
+                            chat_id=telegram_id,
+                            text="Благодарим за участие! Голосавание завершено.",
+                        )
+
+                    is_active = 0
+                    cursor.execute(f"UPDATE `system` SET is_active = {is_active} WHERE id = 1")
+
+                    bot.edit_message_text(
+                        chat_id=call.from_user.id,
+                        message_id=call.message.message_id,
+                        text=MENU_TEXT.format(
+                            question=question,
+                            answer_a=answer_a,
+                            answer_b=answer_b
+                        ),
+                        parse_mode="HTML",
+                        reply_markup=owner_inline_keyboard
                     )
 
 
