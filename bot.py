@@ -35,8 +35,8 @@ settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сбросить �
 
 member_inline_keyboard = types.InlineKeyboardMarkup()
 member_inline_keyboard.add(
-    owner_inline_keyboard.add(types.InlineKeyboardButton(text="Вариант А", callback_data="member_answer1")),
-    owner_inline_keyboard.add(types.InlineKeyboardButton(text="Вариант Б", callback_data="member_answer2"))
+    types.InlineKeyboardButton(text="Вариант А", callback_data="member_answer1"),
+    types.InlineKeyboardButton(text="Вариант Б", callback_data="member_answer2")
 )
 
 setting_question_is_active = False
