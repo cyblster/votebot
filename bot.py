@@ -16,16 +16,16 @@ MYSQL_USER = os.environ.get("mysql_user")
 MYSQL_PASSWORD = os.environ.get("mysql_password")
 MYSQL_DATABASE = os.environ.get("mysql_database")
 
-MENU_TEXT = "<b>[Меню] ({timestamp})</b>\n\n" \
+MENU_TEXT = "<b>[Меню]</b>\n\n" \
              "<b>Вопрос:</b> {question}\n" \
              "<b>Вариант А:</b> {answer_a}\n" \
              "<b>Вариант Б:</b> {answer_b}\n\n" \
              "<b>Активен:</b> {is_active}"
 
-SETTINGS_TEXT = "<b>[Настройки голосования] ({timestamp})</b>\n\n" \
+SETTINGS_TEXT = "<b>[Настройки голосования]</b>\n\n" \
                 "{text}"
 
-MEMBER_TEXT = "<b>[Вопрос] ({timestamp})</b>\n\n" \
+MEMBER_TEXT = "<b>[Вопрос]</b>\n\n" \
               "{question}\n\n" \
               "А) {answer_a}\n" \
               "Б) {answer_b}"
@@ -121,7 +121,6 @@ def command_start(message):
                 bot.send_message(
                     chat_id=message.from_user.id,
                     text=MENU_TEXT.format(
-                        timestamp=datetime.now().strftime("%H:%M:%S"),
                         question=question if question else "Отсутствует",
                         answer_a=answer_a if answer_a else "Отсутствует",
                         answer_b=answer_b if answer_b else "Отсутствует",
@@ -187,7 +186,6 @@ def message_any(message):
             bot.send_message(
                 chat_id=message.from_user.id,
                 text=SETTINGS_TEXT.format(
-                    timestamp=datetime.now().strftime("%H:%M:%S"),
                     text="Текст вопроса был успешно изменен.\n\n"
                          "Выберите пункт, который хотите изменить:"
                 ),
@@ -206,7 +204,6 @@ def message_any(message):
             bot.send_message(
                 chat_id=message.from_user.id,
                 text=SETTINGS_TEXT.format(
-                    timestamp=datetime.now().strftime("%H:%M:%S"),
                     text="Текст ответа А был успешно изменен.\n\n"
                          "Выберите пункт, который хотите изменить:"
                 ),
@@ -225,7 +222,6 @@ def message_any(message):
             bot.send_message(
                 chat_id=message.from_user.id,
                 text=SETTINGS_TEXT.format(
-                    timestamp=datetime.now().strftime("%H:%M:%S"),
                     text="Текст ответа Б был успешно изменен.\n\n"
                          "Выберите пункт, который хотите изменить:"
                 ),
@@ -255,7 +251,6 @@ def handler_query(call):
                     chat_id=call.from_user.id,
                     message_id=call.message.message_id,
                     text=MENU_TEXT.format(
-                        timestamp=datetime.now().strftime("%H:%M:%S"),
                         question=question if question else "Отсутствует",
                         answer_a=answer_a if answer_a else "Отсутствует",
                         answer_b=answer_b if answer_b else "Отсутствует",
@@ -270,8 +265,7 @@ def handler_query(call):
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=SETTINGS_TEXT.format(
-                text="Выберите пункт, который хотите изменить:",
-                timestamp=datetime.now().strftime("%H:%M:%S")
+                text="Выберите пункт, который хотите изменить:"
             ),
             parse_mode="HTML",
             reply_markup=settings_inline_keyboard
@@ -286,7 +280,6 @@ def handler_query(call):
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=SETTINGS_TEXT.format(
-                timestamp=datetime.now().strftime("%H:%M:%S"),
                 text="Напишите текст вопроса:"
             ),
             parse_mode="HTML",
@@ -302,7 +295,6 @@ def handler_query(call):
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=SETTINGS_TEXT.format(
-                timestamp=datetime.now().strftime("%H:%M:%S"),
                 text="Напишите текст ответа А:"
             ),
             parse_mode="HTML",
@@ -318,7 +310,6 @@ def handler_query(call):
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=SETTINGS_TEXT.format(
-                timestamp=datetime.now().strftime("%H:%M:%S"),
                 text="Напишите текст ответа Б:"
             ),
             parse_mode="HTML",
@@ -336,7 +327,6 @@ def handler_query(call):
                     bot.send_message(
                         chat_id=telegram_id,
                         text=MEMBER_TEXT.format(
-                            timestamp=datetime.now().strftime("%H:%M:%S"),
                             question=question,
                             answer_a=answer_a,
                             answer_b=answer_b
