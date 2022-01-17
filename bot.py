@@ -129,23 +129,18 @@ def command_start(message):
 
 @bot.callback_query_handler(lambda call: call.data.startswith("owner_"))
 def keyboard_owner(call):
-    if call.data == "owner_start":
-        is_active = mysql_execute(
-            mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query="SELECT is_active FROM system"
-        )[0]
+    question, answer1, answer2, is_active = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query=f"SELECT * FROM system"
+    )[1:]
 
+    if call.data == "owner_start":
         if is_active:
             return
 
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="UPDATE system SET is_active = 1 WHERE id = 1"
-        )
-
-        _id, question, answer1, answer2, is_active = mysql_execute(
-            mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query=f"SELECT * FROM system"
         )
 
         for telegram_id in mysql_execute(
@@ -159,25 +154,24 @@ def keyboard_owner(call):
                 reply_markup=member_inline_keyboard
             )
 
-    elif call.data == "owner_settings":
-        _id, question, answer1, answer2, is_active = mysql_execute(
-            mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query=f"SELECT * FROM system"
+        bot.edit_message_text(
+            chat_id=call.id,
+            message_id=call.message.message_id,
+            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+            parse_mode="HTML",
+            reply_markup=owner_inline_keyboard
         )
 
-        bot.send_message(
-            chat_id=call.from_user.id,
+    elif call.data == "owner_settings":
+        bot.edit_message_text(
+            chat_id=call.id,
+            message_id=call.message.message_id,
             text=settings_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=settings_inline_keyboard
         )
 
     elif call.data == "owner_end":
-        is_active = mysql_execute(
-            mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query="SELECT is_active FROM system"
-        )[0]
-
         if not is_active:
             return
 
@@ -189,6 +183,14 @@ def keyboard_owner(call):
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="TRUNCATE TABLE member"
+        )
+
+        bot.edit_message_text(
+            chat_id=call.id,
+            message_id=call.message.message_id,
+            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+            parse_mode="HTML",
+            reply_markup=settings_inline_keyboard
         )
 
     bot.answer_callback_query(call.id)
