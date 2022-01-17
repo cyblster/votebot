@@ -34,7 +34,7 @@ settings_inline_keyboard.add(
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сбросить результаты", callback_data="settings_question"))
 
 member_inline_keyboard = types.InlineKeyboardMarkup()
-owner_inline_keyboard.add(
+member_inline_keyboard.add(
     owner_inline_keyboard.add(types.InlineKeyboardButton(text="Вариант А", callback_data="member_answer1")),
     owner_inline_keyboard.add(types.InlineKeyboardButton(text="Вариант Б", callback_data="member_answer2"))
 )
