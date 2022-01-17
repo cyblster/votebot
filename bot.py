@@ -388,7 +388,7 @@ def handler_query(call):
                         reply_markup=owner_inline_keyboard
                     )
 
-    elif call.data == "answer_a":
+    elif call.data == "vote_answer_a":
         with pymysql.connect(
                 host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
                 db=MYSQL_DATABASE, autocommit=True
@@ -429,7 +429,7 @@ def handler_query(call):
                         text="Голосование еще не началось! Пожалуйста, ожидайте."
                     )
 
-    elif call.data == "answer_b":
+    elif call.data == "vote_answer_b":
         with pymysql.connect(
                 host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASSWORD,
                 db=MYSQL_DATABASE, autocommit=True
@@ -443,10 +443,7 @@ def handler_query(call):
                     cursor.execute(f"SELECT is_vote FROM member WHERE telegram_id = {call.from_user.id}")
                     is_vote = cursor.fetchone()[0]
 
-                    print(is_vote)
-
                     if not is_vote:
-                        print(123)
                         cursor.execute("UPDATE `system` SET result_b = result_b + 1 WHERE id = 1")
                         bot.send_message(
                             chat_id=call.from_user.id,
