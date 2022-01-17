@@ -40,6 +40,7 @@ settings_inline_keyboard.add(
     types.InlineKeyboardButton(text="Сменить ответ Б", callback_data="settings_answer2")
 )
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сбросить результаты", callback_data="settings_clear"))
+settings_inline_keyboard.add(types.InlineKeyboardButton(text="Назад", callback_data="settings_exit"))
 
 member_inline_keyboard = types.InlineKeyboardMarkup()
 member_inline_keyboard.add(
@@ -51,8 +52,8 @@ member_inline_keyboard.add(
 )
 
 setting_question_is_active = False
-setting_answer_a_is_active = False
-setting_answer_b_is_active = False
+setting_answer1_is_active = False
+setting_answer2_is_active = False
 
 server = Flask(__name__)
 bot = TeleBot(app_token)
@@ -127,6 +128,27 @@ def command_start(message):
         )
 
 
+@bot.message_handler(content_types=["text"], chat_types=["private"])
+def message_any(message):
+    if setting_question_is_active:
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"UPDATE system SET question = {message.text} WHERE id = 1"
+        )
+    
+    elif setting_answer1_is_active:
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"UPDATE system SET answer1 = {message.text} WHERE id = 1"
+        )
+    
+    elif setting_answer2_is_active:
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"UPDATE system SET answer2 = {message.text} WHERE id = 1"
+        )
+
+
 @bot.callback_query_handler(lambda call: call.data.startswith("owner_"))
 def keyboard_owner(call):
     question, answer1, answer2, is_active = mysql_execute(
@@ -198,6 +220,66 @@ def keyboard_owner(call):
 
 @bot.callback_query_handler(lambda call: call.data.startswith("settings_"))
 def keyboard_settings(call):
+    global setting_question_is_active
+    global setting_answer1_is_active
+    global setting_answer2_is_active
+    
+    question, answer1, answer2, is_active = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query=f"SELECT * FROM system"
+    )[1:]
+
+    if call.data == "settings_question":
+        setting_question_is_active = True
+        setting_answer1_is_active = False
+        setting_answer2_is_active = False
+        
+        bot.send_message(
+            chat_id=call.from_user.id,
+            text="Напишите текст для вопроса:"
+        )
+
+    elif call.data == "settings_answer1":
+        setting_question_is_active = False
+        setting_answer1_is_active = True
+        setting_answer2_is_active = False
+
+        bot.send_message(
+            chat_id=call.from_user.id,
+            text="Напишите текст для варианта ответа А:"
+        )
+
+    elif call.data == "settings_answer2":
+        setting_question_is_active = False
+        setting_answer1_is_active = False
+        setting_answer2_is_active = True
+
+        bot.send_message(
+            chat_id=call.from_user.id,
+            text="Напишите текст для варианта ответа Б:"
+        )
+
+    elif call.data == "settings_exit":
+        setting_question_is_active = False
+        setting_answer1_is_active = False
+        setting_answer2_is_active = False
+        
+        bot.edit_message_text(
+            chat_id=call.id,
+            message_id=call.message.message_id,
+            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+            parse_mode="HTML",
+            reply_markup=owner_inline_keyboard
+        )
+
+    bot.edit_message_text(
+        chat_id=call.id,
+        message_id=call.message.message_id,
+        text=settings_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+        parse_mode="HTML",
+        reply_markup=settings_inline_keyboard
+    )
+
     bot.answer_callback_query(call.id)
 
 
