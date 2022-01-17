@@ -130,9 +130,20 @@ def command_start(message):
 
 @bot.message_handler(content_types=["text"], chat_types=["private"])
 def message_any(message):
+    if not mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT * FROM owner WHERE telegram_id = {message.from_user.id}"
+    ):
+        return
+
     global setting_question_is_active
     global setting_answer1_is_active
     global setting_answer2_is_active
+
+    question, answer1, answer2, is_active = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query=f"SELECT * FROM system"
+    )[1:]
 
     if setting_question_is_active:
         mysql_execute(
@@ -150,6 +161,12 @@ def message_any(message):
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"UPDATE system SET answer2 = '{message.text}' WHERE id = 1"
+        )
+
+    if setting_question_is_active or setting_answer1_is_active or setting_answer2_is_active:
+        bot.send_message(
+            chat_id=message.from_user.id,
+            text=settings_text.format(question, answer1, answer2, is_active)
         )
 
     setting_question_is_active = False
@@ -279,14 +296,6 @@ def keyboard_settings(call):
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
-
-    bot.edit_message_text(
-        chat_id=call.from_user.id,
-        message_id=call.message.message_id,
-        text=settings_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
-        parse_mode="HTML",
-        reply_markup=settings_inline_keyboard
-    )
 
     bot.answer_callback_query(call.id)
 
