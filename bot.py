@@ -186,7 +186,7 @@ def keyboard_owner(call):
 
     elif call.data == "owner_settings":
         bot.edit_message_text(
-            chat_id=call.id,
+            chat_id=call.from_user.id,
             message_id=call.message.message_id,
             text=settings_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
