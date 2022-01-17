@@ -5,7 +5,6 @@ from flask import Flask, request
 from telebot import TeleBot, types, logger
 from pymysql import connect
 
-
 app_url = environ.get("app_url")
 app_token = environ.get("app_token")
 
@@ -15,10 +14,10 @@ mysql_passwd = environ.get("mysql_password")
 mysql_db = environ.get("mysql_database")
 
 owner_menu_text = "<b>[Меню]</b>\n\n" \
-             "Вопрос: {}\n" \
-             "Ответ А: {}\n" \
-             "Ответ Б: {}\n\n" \
-             "Активно: {}"
+                  "Вопрос: {}\n" \
+                  "Ответ А: {}\n" \
+                  "Ответ Б: {}\n\n" \
+                  "Активно: {}"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
@@ -31,12 +30,15 @@ settings_inline_keyboard.add(
     types.InlineKeyboardButton(text="Сменить ответ А", callback_data="settings_answer1"),
     types.InlineKeyboardButton(text="Сменить ответ Б", callback_data="settings_answer2")
 )
-settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сбросить результаты", callback_data="settings_question"))
+settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сбросить результаты", callback_data="settings_clear"))
 
 member_inline_keyboard = types.InlineKeyboardMarkup()
 member_inline_keyboard.add(
     types.InlineKeyboardButton(text="Вариант А", callback_data="member_answer1"),
     types.InlineKeyboardButton(text="Вариант Б", callback_data="member_answer2")
+)
+member_inline_keyboard.add(
+    types.InlineKeyboardButton(text="Результаты голосования", url=app_url)
 )
 
 setting_question_is_active = False
@@ -84,10 +86,10 @@ def command_start(message):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM owner WHERE telegram_id = {message.from_user.id}"
     ):
-        question, answer1, answer2, is_active = mysql_execute(
+        _id, question, answer1, answer2, is_active = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM system"
-        )[1:5]
+        )
 
         bot.send_message(
             chat_id=message.from_user.id,
@@ -115,6 +117,59 @@ def command_start(message):
             chat_id=message.from_user.id,
             text="Вы успешно зарегистрировались. Ожидайте начала голосования."
         )
+
+
+@bot.callback_query_handler(lambda call: call.data.startswith("owner_"))
+def keyboard_owner(call):
+    bot.answer_callback_query(call.id)
+
+
+@bot.callback_query_handler(lambda call: call.data.startswith("settings_"))
+def keyboard_settings(call):
+    bot.answer_callback_query(call.id)
+
+
+@bot.callback_query_handler(lambda call: call.data.startswith("member_"))
+def keyboard_member(call):
+    is_active = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query="SELECT is_active FROM system"
+    )[0]
+
+    answer = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query=f"SELECT answer FROM member WHERE telegram_id = {call.from_user.id}"
+    )[0]
+
+    if not is_active:
+        bot.send_message(
+            chat_id=call.from_user.id,
+            text="Голосование еще не началось. Ожидайте начала голосования."
+        )
+
+        return
+
+    if answer:
+        bot.send_message(
+            chat_id=call.from_user.id,
+            text="Вы уже проголосовали. Ожидайте завершения голосования."
+        )
+
+        return
+
+    if call.data == "member_answer1":
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"UPDATE member SET answer = 1 WHERE telegram_id = {call.from_user.id}"
+        )
+
+    elif call.data == "member_answer2":
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"UPDATE member SET answer = 2 WHERE telegram_id = {call.from_user.id}"
+        )
+
+    bot.answer_callback_query(call.id)
 
 
 def main():
