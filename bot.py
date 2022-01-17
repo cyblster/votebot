@@ -19,6 +19,18 @@ owner_menu_text = "<b>[Меню]</b>\n\n" \
                   "Ответ Б: {}\n\n" \
                   "Активно: {}"
 
+settings_text = "<b>[Параметры голосования]</b>\n\n" \
+                "Вопрос: {}\n" \
+                "Ответ А: {}\n" \
+                "Ответ Б: {}\n\n" \
+                "Активно: {}\n\n" \
+                "Выберите параметр для редактирования:"
+
+member_text = "[Голосование]\n\n" \
+              "{}\n" \
+              "А){}\n" \
+              "Б){}"
+
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Параметры голосования", callback_data="owner_settings"))
@@ -81,7 +93,6 @@ def app_webhook():
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
-    print(1)
     if mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM owner WHERE telegram_id = {message.from_user.id}"
@@ -93,7 +104,7 @@ def command_start(message):
 
         bot.send_message(
             chat_id=message.from_user.id,
-            text=owner_menu_text.format(question, answer1, answer2, is_active),
+            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -121,6 +132,54 @@ def command_start(message):
 
 @bot.callback_query_handler(lambda call: call.data.startswith("owner_"))
 def keyboard_owner(call):
+    if call.data == "owner_start":
+        is_active = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT is_active FROM system"
+        )[0]
+
+        if is_active:
+            return
+
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="UPDATE system SET is_active = 1 WHERE id = 1"
+        )
+
+        _id, question, answer1, answer2, is_active = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT * FROM system"
+        )
+
+        for telegram_id in mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT telegram_id FROM member"
+        ):
+            bot.send_message(
+                chat_id=telegram_id,
+                text=member_text.format(question, answer1, answer2),
+                parse_mode="HTML",
+                reply_markup=member_inline_keyboard
+            )
+
+        bot.answer_callback_query(call.id)
+
+    elif call.data == "owner_settings":
+        _id, question, answer1, answer2, is_active = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT * FROM system"
+        )
+
+        bot.send_message(
+            chat_id=call.from_user.id,
+            text=settings_text.format(question, answer1, answer2, is_active),
+            parse_mode="HTML",
+            reply_markup=settings_inline_keyboard
+        )
+
+    elif call.data == "owner_end":
+        pass
+
     bot.answer_callback_query(call.id)
 
 
