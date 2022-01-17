@@ -1,7 +1,6 @@
 import logging
 from os import environ
 
-import pymysql.cursors
 from flask import Flask, request
 from telebot import TeleBot, types, logger
 from pymysql import connect
@@ -69,7 +68,7 @@ def app_result():
 # Telegram ===================================================================================================
 
 
-@server.route(f"/{app_token}")
+@server.route(f"/{app_token}", methods=["POST"])
 def app_webhook():
     json_string = request.get_data().decode("utf-8")
     update = types.Update.de_json(json_string)
