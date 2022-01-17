@@ -80,6 +80,7 @@ def app_webhook():
 
 @bot.message_handler(commands=["start"], chat_types=["private"])
 def command_start(message):
+    print(1)
     if mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM owner WHERE telegram_id = {message.from_user.id}"
