@@ -204,6 +204,7 @@ def keyboard_owner(call):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="UPDATE system SET is_active = 1 WHERE id = 1"
         )
+        is_active = 1
 
         for telegram_id in mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
@@ -241,6 +242,7 @@ def keyboard_owner(call):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="UPDATE system SET is_active = 0 WHERE id = 1"
         )
+        is_active = 0
 
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
