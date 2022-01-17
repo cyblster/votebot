@@ -348,7 +348,8 @@ def handler_query(call):
                         text=MENU_TEXT.format(
                             question=question,
                             answer_a=answer_a,
-                            answer_b=answer_b
+                            answer_b=answer_b,
+                            is_active=is_active
                         ),
                         parse_mode="HTML",
                         reply_markup=owner_inline_keyboard
@@ -380,7 +381,8 @@ def handler_query(call):
                         text=MENU_TEXT.format(
                             question=question,
                             answer_a=answer_a,
-                            answer_b=answer_b
+                            answer_b=answer_b,
+                            is_active=is_active
                         ),
                         parse_mode="HTML",
                         reply_markup=owner_inline_keyboard
