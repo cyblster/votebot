@@ -369,7 +369,7 @@ def handler_query(call):
 
                 if is_active:
                     for telegram_id in [member["telegram_id"] for member in member_list]:
-                        cursor.execute(f"DROP FROM `member` WHERE id = {telegram_id}")
+                        cursor.execute(f"DELETE FROM member WHERE id = {telegram_id}")
 
                         bot.send_message(
                             chat_id=telegram_id,
