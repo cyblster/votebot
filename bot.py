@@ -119,7 +119,7 @@ def app_result():
            "h2 {color: #414a5f; margin-top: -20px; margin-bottom: -20px; font-weight: 700; font-size: 36px; line-height: 2.5;}" \
            "h3 {color: #003347; margin-bottom: -15px; font-weight: 700; font-size: 28px; line-height: 2.5;}" \
            "span {font-size: 20px;}" \
-           "ul {list-style: none; padding-left: 0; margin-top: -10px; font-size: 20px;}" \
+           "ul {list-style: none; padding-left: 0; margin-top: -5px; font-size: 20px;}" \
            ".bar_row {border-radius: 3px; padding: 1px; background: #f6f7fb;}" \
            ".bar_result1 {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #81e8ff, #4acbfd);}" \
            ".bar_result2 {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #ff8381, #fd4a4a);}" \
@@ -133,9 +133,9 @@ def app_result():
            f"<span align='justify'>{question}</span>" \
            f"<h3 align='left'>Варианты ответа:</h3>" \
            f"<ul><li><div align='left'>А) {answer1} – <b>{count_answer1}</b></div>" \
-           f"<div class='bar_row'><div class='bar_result1' style='width: {answer1_procent if answer1_procent else '1'}%'><div class='bar_text'>{answer1_procent}%</div></div></div></li><br>" \
+           f"<div class='bar_row'><div class='bar_result1' style='width: {answer1_procent if answer1_procent else '1.5'}%'><div class='bar_text'>{answer1_procent}%</div></div></div></li><br>" \
            f"<li><div align='left'>Б) {answer2} – <b>{count_answer2}</b></div>" \
-           f"<div class='bar_row'><div class='bar_result2' style='width: {answer2_procent if answer2_procent else '1'}%'><div class='bar_text'>{answer2_procent}%</div></div></div></li></ul>" \
+           f"<div class='bar_row'><div class='bar_result2' style='width: {answer2_procent if answer2_procent else '1.5'}%'><div class='bar_text'>{answer2_procent}%</div></div></div></li></ul>" \
            f"</div></body>"
 
     return "<html>" + head + body + "</html>", 200
