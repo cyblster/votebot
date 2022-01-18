@@ -108,8 +108,8 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
-    answer1_procent = int(count_answer1 / (count_answer1 + count_answer2) * 100) if count_answer1 else 0
-    answer2_procent = int(count_answer2 / (count_answer1 + count_answer2) * 100) if count_answer2 else 0
+    answer1_procent = round(count_answer1 / (count_answer1 + count_answer2) * 100) if count_answer1 else 0
+    answer2_procent = round(count_answer2 / (count_answer1 + count_answer2) * 100) if count_answer2 else 0
 
     head = "<head>" \
            "<meta charset='utf-8'>" \
@@ -121,7 +121,8 @@ def app_result():
            "span {font-size: 20px;}" \
            "ul {list-style: none; padding-left: 0; font-size: 20px;}" \
            ".bar_row {border-radius: 3px; padding: 2px; background: #f6f7fb;}" \
-           ".bar_result {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #81e8ff, #4acbfd);}" \
+           ".bar_result1 {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #81e8ff, #4acbfd);}" \
+           ".bar_result2 {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #ff8381, #fd4a4a);}" \
            ".bar_text {font-size: 14px; padding-left: 5px; line-height: 16px; color: #fff;}" \
            "</style>" \
            "</head>"
@@ -132,8 +133,8 @@ def app_result():
            f"<span align='justify'>{question}</span>" \
            f"<h3 align='left'>Варианты ответа:</h3>" \
            f"<ul><li><div align='left'>А) {answer1} – <b>{count_answer1}</b></div>" \
-           f"<div class='bar_row'><div class='bar_result' style='width: {answer1_procent}'><div class='bar_text'>{answer1_procent}%</div></div></div></li>" \
-           f"<li><div align='left'>Б) {answer2} – <b>{count_answer2}</b></div></li></ul>" \
+           f"<div class='bar_row'><div class='bar_result1' style='width: {answer1_procent if answer1_procent else '5'}%'><div class='bar_text'>{answer1_procent}%</div></div></div></li>" \
+           f"<div class='bar_row'><div class='bar_result2' style='width: {answer2_procent if answer2_procent else '5'}%'><div class='bar_text'>{answer2_procent}%</div></div></div></li></ul>" \
            f"</div></body>"
 
     return "<html>" + head + body + "</html>", 200
