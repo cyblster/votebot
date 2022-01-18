@@ -401,6 +401,8 @@ def keyboard_owner(call):
         )
 
     elif call.data == "owner_refresh":
+        bot.answer_callback_query(call.id)
+
         people = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="SELECT COUNT(*) FROM member"
