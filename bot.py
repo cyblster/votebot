@@ -126,7 +126,7 @@ def command_start(message):
 
         answer = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query=f"SELECT answer FROM member WHERE telegram_id = {call.from_user.id}"
+            query=f"SELECT answer FROM member WHERE telegram_id = {message.from_user.id}"
         )[0]
 
         if answer == 1:
