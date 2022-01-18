@@ -118,7 +118,9 @@ body {margin: 0;}
     text-align: center;
 }
 #question_text {
+    position: relative;
     text-align: justify;
+    padding: 10% 0% 0% bottom;
 }
 #answer1 {
     text-align: center;
