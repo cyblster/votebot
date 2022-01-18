@@ -112,7 +112,7 @@ def app_result():
            "<meta charset='utf-8'>" \
            "<title>Результаты голосования</title>" \
            "<style>" \
-           "li {display: inline-block;}" \
+           "li {display: block;}" \
            "</style>" \
            "</head>"
 
