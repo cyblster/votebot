@@ -375,7 +375,9 @@ def keyboard_member(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=member_text_answer1_underline.format(question, answer1, answer2)
+            text=member_text_answer1_underline.format(question, answer1, answer2),
+            parse_mode="HTML",
+            reply_markup=member_inline_keyboard
         )
 
     elif call.data == "member_answer2":
@@ -387,7 +389,9 @@ def keyboard_member(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=member_text_answer2_underline.format(question, answer1, answer2)
+            text=member_text_answer2_underline.format(question, answer1, answer2),
+            parse_mode="HTML",
+            reply_markup=member_inline_keyboard
         )
 
     bot.send_message(
