@@ -113,8 +113,8 @@ def app_result():
            "<title>Результаты голосования</title>" \
            "<style>" \
            "body {font-family: Roboto, sans-serif;}" \
-           "h2 {color: #414a5f; font-weight: 700; font-size: 40px; line-height: 2.5;}" \
-           "h3 {color: #003347; font-weight: 700; font-size: 32px; line-height: 2.5;}" \
+           "h2 {color: #414a5f; margin-bottom: 0px; font-weight: 700; font-size: 40px; line-height: 2.5;}" \
+           "h3 {color: #003347; margin-bottom: 0px; font-weight: 700; font-size: 32px; line-height: 2.5;}" \
            "span {font-size: 24px;}" \
            "ul {list-style: none; padding-left: 0; font-size: 16px;}" \
            "</style>" \
