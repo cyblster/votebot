@@ -108,7 +108,7 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
-    return f"<div>{'Голосование началось' if is_active else 'Голосование завершено'}<div><br>" \
+    return f"<div align='center'>{'Голосование началось' if is_active else 'Голосование завершено'}<div><br>" \
            f"<div>{question}</div><br>" \
            f"<div>{count_answer1}<br>{answer1}</div><br>" \
            f"<div>{count_answer2}<br>{answer2}</div>", 200
