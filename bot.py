@@ -14,6 +14,7 @@ mysql_passwd = environ.get("mysql_password")
 mysql_db = environ.get("mysql_database")
 
 owner_menu_text = "<b>[Меню]</b>\n\n" \
+                  "<b>Участников:</b>{} чел.\n\n" \
                   "<b>Вопрос:</b>\n{}\n\n" \
                   "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
                   "<b>Голосование запущено:</b> {}"
@@ -159,6 +160,11 @@ def command_start(message):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM owner WHERE telegram_id = {message.from_user.id}"
     ):
+        telegram_id_list = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT telegram_id FROM member"
+        )
+
         _id, question, answer1, answer2, is_active = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM system"
@@ -166,7 +172,7 @@ def command_start(message):
 
         bot.send_message(
             chat_id=message.from_user.id,
-            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(len(telegram_id_list), question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -324,7 +330,7 @@ def keyboard_owner(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(len(telegram_id_list), answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -383,7 +389,7 @@ def keyboard_owner(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(len(telegram_id_list), answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -437,10 +443,15 @@ def keyboard_settings(call):
         setting_answer1_is_active = False
         setting_answer2_is_active = False
 
+        telegram_id_list = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT telegram_id FROM member"
+        )
+
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(len(telegram_id_list), answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
