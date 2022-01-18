@@ -103,7 +103,7 @@ def app_result():
         )[0]
 
     else:
-        question, answer1, answer2, count_answer1, count_answer2 = mysql_execute(
+        _id, question, answer1, answer2, count_answer1, count_answer2 = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
