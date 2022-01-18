@@ -14,7 +14,7 @@ mysql_passwd = environ.get("mysql_password")
 mysql_db = environ.get("mysql_database")
 
 owner_menu_text = "<b>[Меню]</b>\n\n" \
-                  "<b>Участников:</b>{} чел.\n\n" \
+                  "<b>Участников:</b> {} чел.\n\n" \
                   "<b>Вопрос:</b>\n{}\n\n" \
                   "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
                   "<b>Голосование запущено:</b> {}"
@@ -42,6 +42,7 @@ owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голо
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Параметры голосования", callback_data="owner_settings"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Завершить голосование", callback_data="owner_end"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Результаты голосования", url=app_url))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Обновить меню", callback_data="owner_refresh"))
 
 settings_inline_keyboard = types.InlineKeyboardMarkup()
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сменить вопрос", callback_data="settings_question"))
@@ -58,9 +59,6 @@ member_inline_keyboard.add(
 )
 member_inline_keyboard.add(
     types.InlineKeyboardButton(text="Результаты голосования", url=app_url)
-)
-member_inline_keyboard.add(
-    types.InlineKeyboardButton(text="Обновить меню", callback_data="owner_refresh")
 )
 
 setting_question_is_active = False
