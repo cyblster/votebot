@@ -82,22 +82,7 @@ def mysql_execute(host: str, user: str, passwd: str, db: str, query: str, autoco
 
 @server.route("/")
 def app_result():
-    count_answer1 = mysql_execute(
-        mysql_host, mysql_user, mysql_passwd, mysql_db,
-        query=f"SELECT COUNT(answer) FROM member WHERE answer = 1"
-    )[0]
-
-    count_answer2 = mysql_execute(
-        mysql_host, mysql_user, mysql_passwd, mysql_db,
-        query=f"SELECT COUNT(answer) FROM member WHERE answer = 2"
-    )[0]
-
-    if not count_answer1:
-        count_answer1 = 0
-    if not count_answer2:
-        count_answer2 = 0
-
-    return f"1: {count_answer1}<br>2: {count_answer2}", 200
+    return "", 200
 
 
 # Telegram ===================================================================================================
@@ -307,6 +292,20 @@ def keyboard_owner(call):
                     chat_id=telegram_id,
                     text="Голосование завершено. Благодарим за участие."
                 )
+
+        count_answer1 = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT COUNT(answer) FROM member WHERE answer = 1"
+        )[0]
+        count_answer2 = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT COUNT(answer) FROM member WHERE answer = 2"
+        )[0]
+        mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"INSERT INTO history (question, answer1, answer2, count_answer1, count_answer2) "
+                  f"VALUES ('{question}', '{answer1}', '{answer2}', {count_answer1}, {count_answer2})"
+        )
 
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
