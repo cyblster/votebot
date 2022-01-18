@@ -40,6 +40,7 @@ owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Параметры голосования", callback_data="owner_settings"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Завершить голосование", callback_data="owner_end"))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Результаты голосования", url=app_url))
 
 settings_inline_keyboard = types.InlineKeyboardMarkup()
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сменить вопрос", callback_data="settings_question"))
@@ -111,7 +112,6 @@ def app_result():
            f"<div>{question}</div>" \
            f"<div>{count_answer1}<br>{answer1}</div>" \
            f"<div>{count_answer2}<br>{answer2}</div>", 200
-
 
 
 # Telegram ===================================================================================================
