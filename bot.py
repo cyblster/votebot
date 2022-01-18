@@ -92,6 +92,11 @@ def app_result():
         query=f"SELECT COUNT(answer) WHERE answer = 2 ORDER BY answer"
     )
 
+    if not count_answer1:
+        count_answer1 = 0
+    if not count_answer2:
+        count_answer2 = 0
+
     return f"1: {count_answer1}<br>2: {count_answer2}", 200
 
 
