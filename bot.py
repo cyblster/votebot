@@ -1,6 +1,7 @@
 import logging
 from os import environ
 
+import telebot.apihelper
 from flask import Flask, request
 from telebot import TeleBot, types, logger
 from pymysql import connect
@@ -413,11 +414,11 @@ def keyboard_owner(call):
             bot.edit_message_text(
                 chat_id=call.from_user.id,
                 message_id=call.message.message_id,
-                text=owner_menu_text.format(people, answer1, answer2, "Да" if is_active else "Нет"),
+                text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
                 parse_mode="HTML",
                 reply_markup=owner_inline_keyboard
             )
-        except:
+        except telebot.apihelper.ApiTelegramException:
             pass
 
 
