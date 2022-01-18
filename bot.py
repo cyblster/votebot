@@ -119,8 +119,8 @@ def app_result():
            "h2 {color: #414a5f; margin-top: -20px; margin-bottom: -20px; font-weight: 700; font-size: 36px; line-height: 2.5;}" \
            "h3 {color: #003347; margin-bottom: -15px; font-weight: 700; font-size: 28px; line-height: 2.5;}" \
            "span {font-size: 20px;}" \
-           "ul {list-style: none; padding-left: 0; padding-top: 0; font-size: 20px;}" \
-           ".bar_row {border-radius: 3px; padding: 2px; background: #f6f7fb;}" \
+           "ul {list-style: none; padding-left: 0; padding-top: -10px; font-size: 20px;}" \
+           ".bar_row {border-radius: 3px; padding: 1px; background: #f6f7fb;}" \
            ".bar_result1 {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #81e8ff, #4acbfd);}" \
            ".bar_result2 {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #ff8381, #fd4a4a);}" \
            ".bar_text {font-size: 14px; padding-left: 5px; line-height: 16px; color: #fff;}" \
