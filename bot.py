@@ -171,7 +171,6 @@ def command_start(message):
             query="SELECT COUNT(*) FROM member"
         )[0]
 
-        print(people)
 
         bot.send_message(
             chat_id=message.from_user.id,
@@ -478,7 +477,7 @@ def keyboard_settings(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(people, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
