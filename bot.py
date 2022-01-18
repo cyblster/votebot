@@ -108,6 +108,9 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
+    answer1_procent = int(count_answer1 / (count_answer1 + count_answer2) * 100)
+    answer2_procent = int(count_answer2 / (count_answer1 + count_answer2) * 100)
+
     head = "<head>" \
            "<meta charset='utf-8'>" \
            "<title>Результаты голосования</title>" \
@@ -117,6 +120,9 @@ def app_result():
            "h3 {color: #003347; margin-bottom: -15px; font-weight: 700; font-size: 28px; line-height: 2.5;}" \
            "span {font-size: 20px;}" \
            "ul {list-style: none; padding-left: 0; font-size: 20px;}" \
+           ".bar_row {border-radius: 3px; padding: 2px; background: #f6f7fb;}" \
+           ".bar_result {border-radius: 1px; height: 20px; background-image: linear-gradient(270deg, #81e8ff, #4acbfd);}" \
+           ".bar_text {font-size: 14px; padding-left: 5px; line-height: 16px; color: #fff;}" \
            "</style>" \
            "</head>"
 
@@ -125,7 +131,8 @@ def app_result():
            f"<h3 align='left'>Вопрос:</h3>" \
            f"<span align='justify'>{question}</span>" \
            f"<h3 align='left'>Варианты ответа:</h3>" \
-           f"<ul><li><div align='left'>А) {answer1} – <b>{count_answer1}</b></div></li>" \
+           f"<ul><li><div align='left'>А) {answer1} – <b>{count_answer1}</b></div>" \
+           f"<div class='bar_row'><div class='bar_result' style='width: {answer1_procent}'><div class='bar_text'>{answer1_procent}%</div></div></div></li>" \
            f"<li><div align='left'>Б) {answer2} – <b>{count_answer2}</b></div></li></ul>" \
            f"</div></body>"
 
