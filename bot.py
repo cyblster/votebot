@@ -113,19 +113,21 @@ def app_result():
            "<title>Результаты голосования</title>" \
            "<style>" \
            "body {font-family: Roboto, sans-serif;}" \
-           "h2 {color: #414a5f; margin-bottom: 10px; font-weight: 700; font-size: 32px; line-height: 2.5;}" \
-           "h3 {color: #003347; margin-bottom: 10px; font-weight: 700; font-size: 24px; line-height: 2.5;}" \
+           "h2 {color: #414a5f; font-weight: 700; font-size: 40px; line-height: 2.5;}" \
+           "h3 {color: #003347; font-weight: 700; font-size: 32px; line-height: 2.5;}" \
+           "span {font-size: 24px;}" \
            "ul {list-style: none; padding-left: 0; font-size: 16px;}" \
            "</style>" \
            "</head>"
 
     body = f"<body><div>" \
            f"<h2>Голосование {'началось' if is_active else 'завершено'}!</h2>" \
-           f"<h3 align='justify'>{question}</h3>" \
-           f"<ul>" \
-           f"<li><div align='left'>А) {answer1} – <b>{count_answer1}</b></div></li>" \
-           f"<li><div align='left'>Б) {answer2} – <b>{count_answer2}</b></div></li>" \
-           f"</ul></div></body>"
+           f"<h3 align='left'>Вопрос:</h3>" \
+           f"<span align='justify'>{question}</span>" \
+           f"<h3 align='left'>Варианты ответа:</h3>" \
+           f"<ul><li><div align='left'>А) {answer1} – <b>{count_answer1}</b></div></li>" \
+           f"<li><div align='left'>Б) {answer2} – <b>{count_answer2}</b></div></li></ul>" \
+           f"</div></body>"
 
     return "<html>" + head + body + "</html>", 200
 
