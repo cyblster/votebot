@@ -59,6 +59,9 @@ member_inline_keyboard.add(
 member_inline_keyboard.add(
     types.InlineKeyboardButton(text="Результаты голосования", url=app_url)
 )
+member_inline_keyboard.add(
+    types.InlineKeyboardButton(text="Обновить меню", callback_data="owner_refresh")
+)
 
 setting_question_is_active = False
 setting_answer1_is_active = False
@@ -393,6 +396,18 @@ def keyboard_owner(call):
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
+
+    elif call.data == "owner_refresh":
+        try:
+            bot.edit_message_text(
+                chat_id=call.from_user.id,
+                message_id=call.message.message_id,
+                text=owner_menu_text.format(len(telegram_id_list), answer1, answer2, "Да" if is_active else "Нет"),
+                parse_mode="HTML",
+                reply_markup=owner_inline_keyboard
+            )
+        except:
+            pass
 
 
 @bot.callback_query_handler(lambda call: call.data.startswith("settings_"))
