@@ -271,6 +271,8 @@ def keyboard_owner(call):
 
     if call.data == "owner_start":
         if is_active:
+            bot.answer_callback_query(call.id)
+
             return
 
         mysql_execute(
