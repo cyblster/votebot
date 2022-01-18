@@ -206,11 +206,12 @@ def keyboard_owner(call):
         )
         is_active = 1
 
-        for telegram_id in mysql_execute(
+        telegram_id_list = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="SELECT telegram_id FROM member"
-        ):
-            if telegram_id:
+        )
+        if telegram_id_list:
+            for telegram_id in telegram_id_list:
                 bot.send_message(
                     chat_id=telegram_id,
                     text=member_text.format(question, answer1, answer2),
