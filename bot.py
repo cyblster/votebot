@@ -109,8 +109,8 @@ def app_result():
         )
 
     return f"<div><h1>{'Голосование началось' if is_active else 'Голосование завершено'}</h1><div>" \
-           f"<div>{question}</div>" \
-           f"<div>{count_answer1}<br>{answer1}</div>" \
+           f"<div>{question}</div><br>" \
+           f"<div>{count_answer1}<br>{answer1}</div><br>" \
            f"<div>{count_answer2}<br>{answer2}</div>", 200
 
 
