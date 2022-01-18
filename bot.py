@@ -28,6 +28,14 @@ member_text = "<b>[Голосование]</b>\n\n" \
               "<b>Вопрос:</b>\n{}\n\n" \
               "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n"
 
+member_text_answer1_underline = "<b>[Голосование]</b>\n\n" \
+                                "<b>Вопрос:</b>\n{}\n\n" \
+                                "<b>Варианты ответа:</b>\n<u>А) <i>{}</i></u>\nБ) <i>{}</i>\n\n"
+
+member_text_answer2_underline = "<b>[Голосование]</b>\n\n" \
+                                "<b>Вопрос:</b>\n{}\n\n" \
+                                "<b>Варианты ответа:</b>\nА) <i>{}</i><\n<u>Б) <i>{}</i></u>\n\n"
+
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Параметры голосования", callback_data="owner_settings"))
@@ -332,10 +340,10 @@ def keyboard_settings(call):
 
 @bot.callback_query_handler(lambda call: call.data.startswith("member_"))
 def keyboard_member(call):
-    is_active = mysql_execute(
+    question, answer1, answer2, is_active = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
-        query="SELECT is_active FROM system"
-    )[0]
+        query=f"SELECT * FROM system"
+    )[1:]
 
     answer = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
@@ -364,10 +372,22 @@ def keyboard_member(call):
             query=f"UPDATE member SET answer = 1 WHERE telegram_id = {call.from_user.id}"
         )
 
+        bot.edit_message_text(
+            chat_id=call.from_user.id,
+            message_id=call.message.message_id,
+            text=member_text_answer1_underline.format(question, answer1, answer2)
+        )
+
     elif call.data == "member_answer2":
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"UPDATE member SET answer = 2 WHERE telegram_id = {call.from_user.id}"
+        )
+
+        bot.edit_message_text(
+            chat_id=call.from_user.id,
+            message_id=call.message.message_id,
+            text=member_text_answer2_underline.format(question, answer1, answer2)
         )
 
     bot.send_message(
