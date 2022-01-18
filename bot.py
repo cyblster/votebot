@@ -270,9 +270,9 @@ def keyboard_owner(call):
     )[1:]
 
     if call.data == "owner_start":
-        if is_active:
-            bot.answer_callback_query(call.id)
+        bot.answer_callback_query(call.id)
 
+        if is_active:
             return
 
         mysql_execute(
@@ -312,9 +312,9 @@ def keyboard_owner(call):
         )
 
     elif call.data == "owner_end":
-        if not is_active:
-            bot.answer_callback_query(call.id)
+        bot.answer_callback_query(call.id)
 
+        if not is_active:
             return
 
         mysql_execute(
@@ -361,11 +361,11 @@ def keyboard_owner(call):
             reply_markup=owner_inline_keyboard
         )
 
-    bot.answer_callback_query(call.id)
-
 
 @bot.callback_query_handler(lambda call: call.data.startswith("settings_"))
 def keyboard_settings(call):
+    bot.answer_callback_query(call.id)
+
     global setting_question_is_active
     global setting_answer1_is_active
     global setting_answer2_is_active
@@ -418,11 +418,11 @@ def keyboard_settings(call):
             reply_markup=owner_inline_keyboard
         )
 
-    bot.answer_callback_query(call.id)
-
 
 @bot.callback_query_handler(lambda call: call.data.startswith("member_"))
 def keyboard_member(call):
+    bot.answer_callback_query(call.id)
+
     question, answer1, answer2, is_active = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
         query=f"SELECT * FROM system"
@@ -481,8 +481,6 @@ def keyboard_member(call):
         chat_id=call.from_user.id,
         text="Ваш голос учтен. Ожидайте завершения голосования."
     )
-
-    bot.answer_callback_query(call.id)
 
 
 def main():
