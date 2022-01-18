@@ -169,7 +169,7 @@ def command_start(message):
         people = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="SELECT COUNT(*) FROM member"
-        )
+        )[0]
 
         bot.send_message(
             chat_id=message.from_user.id,
@@ -331,7 +331,7 @@ def keyboard_owner(call):
         people = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="SELECT COUNT(*) FROM member"
-        )
+        )[0]
 
         bot.edit_message_text(
             chat_id=call.from_user.id,
@@ -406,7 +406,7 @@ def keyboard_owner(call):
         people = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="SELECT COUNT(*) FROM member"
-        )
+        )[0]
 
         try:
             bot.edit_message_text(
@@ -471,7 +471,7 @@ def keyboard_settings(call):
         people = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query="SELECT COUNT(*) FROM member"
-        )
+        )[0]
 
         bot.edit_message_text(
             chat_id=call.from_user.id,
