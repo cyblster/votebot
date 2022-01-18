@@ -84,13 +84,13 @@ def mysql_execute(host: str, user: str, passwd: str, db: str, query: str, autoco
 def app_result():
     count_answer1 = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
-        query=f"SELECT COUNT(answer) WHERE answer = 1 ORDER BY answer"
-    )
+        query=f"SELECT COUNT(answer) FROM member WHERE answer = 1"
+    )[0]
 
     count_answer2 = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
-        query=f"SELECT COUNT(answer) WHERE answer = 2 ORDER BY answer"
-    )
+        query=f"SELECT COUNT(answer) FROM member WHERE answer = 2"
+    )[0]
 
     if not count_answer1:
         count_answer1 = 0
