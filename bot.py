@@ -393,6 +393,7 @@ def keyboard_member(call):
             parse_mode="HTML",
             reply_markup=member_inline_keyboard
         )
+        print(123)
 
     bot.send_message(
         chat_id=call.from_user.id,
