@@ -34,7 +34,7 @@ member_text_answer1_underline = "<b>[Голосование]</b>\n\n" \
 
 member_text_answer2_underline = "<b>[Голосование]</b>\n\n" \
                                 "<b>Вопрос:</b>\n{}\n\n" \
-                                "<b>Варианты ответа:</b>\nА) <i>{}</i><\n<u>Б) <i>{}</i></u>\n\n"
+                                "<b>Варианты ответа:</b>\nА) <i>{}</i>\n<u>Б) <i>{}</i></u>\n\n"
 
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
