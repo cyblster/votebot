@@ -311,6 +311,8 @@ def keyboard_owner(call):
 
     elif call.data == "owner_end":
         if not is_active:
+            bot.answer_callback_query(call.id)
+
             return
 
         mysql_execute(
