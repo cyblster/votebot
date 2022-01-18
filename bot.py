@@ -112,6 +112,7 @@ def app_result():
            "<meta charset='utf-8'>" \
            "<title>Результаты голосования</title>" \
            "<style>" \
+           "body {font-family: Roboto, sans-serif;}" \
            "h3 {color: #003347; margin-bottom: 10px; font-weight: 700; font-size: 16px; line-height: 2.5;}" \
            "ul {list-style: none; padding-left: 0;}" \
            "</style>" \
