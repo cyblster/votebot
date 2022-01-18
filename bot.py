@@ -108,8 +108,8 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
-    answer1_procent = int(count_answer1 / (count_answer1 + count_answer2) * 100)
-    answer2_procent = int(count_answer2 / (count_answer1 + count_answer2) * 100)
+    answer1_procent = int(count_answer1 / (count_answer1 + count_answer2) * 100) if count_answer1 else 0
+    answer2_procent = int(count_answer2 / (count_answer1 + count_answer2) * 100) if count_answer2 else 0
 
     head = "<head>" \
            "<meta charset='utf-8'>" \
