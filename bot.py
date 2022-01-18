@@ -82,7 +82,42 @@ def mysql_execute(host: str, user: str, passwd: str, db: str, query: str, autoco
 
 @server.route("/")
 def app_result():
-    return "", 200
+    question = ""
+    answer1 = ""
+    answer2 = ""
+    count_answer1 = 0
+    count_answer2 = 0
+
+    is_active = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query="SELECT is_active FROM system"
+    )[0]
+
+    if is_active:
+        question, answer1, answer2 = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT * FROM system"
+        )[1:4]
+
+        count_answer1 = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT COUNT(answer) FROM member WHERE answer = 1"
+        )[0]
+        count_answer2 = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT COUNT(answer) FROM member WHERE answer = 2"
+        )[0]
+
+    else:
+        question, answer1, answer2, count_answer1, count_answer2 = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
+        )
+
+    return f"<h1>Голосование</h1>" \
+           f"<h2>Вопрос:</h2>{question}<br><br>" \
+           f"<h2>Варианты ответа:</h2>" \
+           f"А) <i>{answer1}</i> ({count_answer1})<br>Б) <i>{answer2}</i> ({count_answer2})", 200
 
 
 # Telegram ===================================================================================================
