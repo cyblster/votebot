@@ -21,7 +21,7 @@ owner_menu_text = "<b>[Меню]</b>\n\n" \
 settings_text = "<b>[Параметры голосования]</b>\n\n" \
                 "<b>Вопрос:</b>\n{}\n\n" \
                 "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
-                "<b>Голосование активно:</b> {}\n\n" \
+                "<b>Голосование запущено:</b> {}\n\n" \
                 "Выберите параметр для редактирования:"
 
 member_text = "<b>[Голосование]</b>\n\n" \
@@ -107,10 +107,11 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
-    return f"<h1>Голосование</h1>" \
-           f"<h2>Вопрос:</h2>{question}<br><br>" \
-           f"<h2>Варианты ответа:</h2>" \
-           f"А) <i>{answer1}</i> ({count_answer1})<br>Б) <i>{answer2}</i> ({count_answer2})", 200
+    return f"<div><h1>{'Голосование началось' if is_active else 'Голосование завершено'}</h1><div>" \
+           f"<div>{question}</div>" \
+           f"<div>{count_answer1}<br>{answer1}</div>" \
+           f"<div>{count_answer2}<br>{answer2}</div>", 200
+
 
 
 # Telegram ===================================================================================================
