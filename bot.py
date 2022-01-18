@@ -124,12 +124,33 @@ def command_start(message):
             query=f"SELECT * FROM system"
         )[1:]
 
-        bot.send_message(
-            chat_id=message.from_user.id,
-            text=member_text.format(question, answer1, answer2),
-            parse_mode="HTML",
-            reply_markup=member_inline_keyboard
-        )
+        answer = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT answer FROM member WHERE telegram_id = {call.from_user.id}"
+        )[0]
+
+        if answer == 1:
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text=member_text_answer1_underline.format(question, answer1, answer2),
+                parse_mode="HTML",
+                reply_markup=member_inline_keyboard
+            )
+        elif answer == 2:
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text=member_text_answer2_underline.format(question, answer1, answer2),
+                parse_mode="HTML",
+                reply_markup=member_inline_keyboard
+            )
+
+        else:
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text=member_text.format(question, answer1, answer2),
+                parse_mode="HTML",
+                reply_markup=member_inline_keyboard
+            )
 
     else:
         is_active = mysql_execute(
