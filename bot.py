@@ -80,7 +80,7 @@ def mysql_execute(host: str, user: str, passwd: str, db: str, query: str, autoco
 # Website ===================================================================================================
 
 
-@server.route("/result")
+@server.route("/")
 def app_result():
     count_answer1 = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
