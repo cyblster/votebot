@@ -156,7 +156,7 @@ body {margin: 0;}
 </div>
 </body>
 """
-    body.format(
+    body = body.format(
         is_active="началось" if is_active else "завершено",
         question_text=question,
         answer1_count=count_answer1, answer1_text=answer1,
