@@ -153,6 +153,14 @@ def command_start(message):
             query=f"SELECT * FROM system"
         )[1:]
 
+        if not is_active:
+            bot.send_message(
+                chat_id=message.from_user.id,
+                text="Вы уже зарегистрированы. Ожидайте начала голосования"
+            )
+
+            return
+
         answer = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT answer FROM member WHERE telegram_id = {message.from_user.id}"
