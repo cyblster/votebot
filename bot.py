@@ -108,16 +108,62 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
-    with open("website.html", "r") as html:
-        content = html.read()
+    head = """
+<head>
+<meta charset="utf-8">
+<title>Результаты голосовния</title>
+<style type="text/css">
+body {margin: 0;}
+#is_active {
+    text-align: center;
+}
+#question_text {
+    text-align: justify;
+}
+#answer1 {
+    text-align: center;
+}
+#answer1_count {
+    text-align: center;
+}
+#answer1_text {
+    text-align: justify;
+}
+#answer2 {
+    text-align: center;
+}
+#answer2_count {
+    text-align: center;
+}
+#answer2_text {
+    text-align: justify;
+}
+</style>
+</head>
+"""
 
-        return content.format(
-            is_active="началось" if is_active else "завершено",
-            question_text=question,
-            answer1_count=count_answer1, answer1_text=answer1,
-            answer2_count=count_answer2, answer2_text=answer2
-        ), 200
+    body = """
+<body>
+<p id="is_active">Голосование {is_active}</p>
+<p id="question_text">{question_text}</p>
+<div id="answer1">
+    <p id="answer1_count">{answer1_count}</p>
+    <p id="answer1_text">{answer1_text}</p>
+</div>
+<div id="answer2">
+    <p id="answer2_count">{answer2_count}</p>
+    <p id="answer2_text">{answer2_text}</p>
+</div>
+</body>
+"""
+    body.format(
+        is_active="началось" if is_active else "завершено",
+        question_text=question,
+        answer1_count=count_answer1, answer1_text=answer1,
+        answer2_count=count_answer2, answer2_text=answer2
+    )
 
+    return "<html>" + head + body + "</html>", 200
 
 # Telegram ===================================================================================================
 
