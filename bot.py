@@ -119,9 +119,16 @@ def command_start(message):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM member WHERE telegram_id = {message.from_user.id}"
     ):
+        question, answer1, answer2, is_active = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query=f"SELECT * FROM system"
+        )[1:]
+
         bot.send_message(
             chat_id=message.from_user.id,
-            text="Вы уже зарегистрированы. Ожидайте начала или завершения голосования."
+            text=member_text.format(question, answer1, answer2),
+            parse_mode="HTML",
+            reply_markup=member_inline_keyboard
         )
 
     else:
@@ -393,7 +400,6 @@ def keyboard_member(call):
             parse_mode="HTML",
             reply_markup=member_inline_keyboard
         )
-        print(123)
 
     bot.send_message(
         chat_id=call.from_user.id,
