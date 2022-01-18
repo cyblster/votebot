@@ -110,10 +110,10 @@ def app_result():
 
     style = "<style type='text/css'>" \
             "body {margin: 0;}" \
-            "#queston {font-family: Arial; font-size: 200%; font-weight: lighter;}" \
+            "#question {font-family: Arial; font-size: 200%; font-weight: lighter;}" \
             "</style>"
 
-    div_question = f"<div id='question'><p>Голосование {'началось' if is_active else 'завершено'}</p></div>"
+    div_question = f"<div><p id='question'>Голосование {'началось' if is_active else 'завершено'}</p></div>"
     div_answer1 = f"<div><p id='count_answer1'>{count_answer1}</p><p id='answer1'>{answer1}</p></div>"
     div_answer2 = f"<div><p id='count_answer2'>{count_answer2}</p><p id='answer2'>{answer2}</p></div>"
 
