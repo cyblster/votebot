@@ -39,7 +39,7 @@ member_text_answer2_underline = "<b>[Голосование]</b>\n\n" \
 owner_inline_keyboard = types.InlineKeyboardMarkup()
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Начать голосование", callback_data="owner_start"))
 owner_inline_keyboard.add(types.InlineKeyboardButton(text="Параметры голосования", callback_data="owner_settings"))
-owner_inline_keyboard.add(types.InlineKeyboardButton(text="Закончить голосование", callback_data="owner_end"))
+owner_inline_keyboard.add(types.InlineKeyboardButton(text="Завершить голосование", callback_data="owner_end"))
 
 settings_inline_keyboard = types.InlineKeyboardMarkup()
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сменить вопрос", callback_data="settings_question"))
@@ -47,7 +47,6 @@ settings_inline_keyboard.add(
     types.InlineKeyboardButton(text="Сменить ответ А", callback_data="settings_answer1"),
     types.InlineKeyboardButton(text="Сменить ответ Б", callback_data="settings_answer2")
 )
-settings_inline_keyboard.add(types.InlineKeyboardButton(text="Сбросить результаты", callback_data="settings_clear"))
 settings_inline_keyboard.add(types.InlineKeyboardButton(text="Назад", callback_data="settings_exit"))
 
 member_inline_keyboard = types.InlineKeyboardMarkup()
