@@ -108,71 +108,14 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
-    head = """
-<head>
-<meta charset="utf-8">
-<title>Результаты голосовния</title>
-<style type="text/css">
-body {margin: 0;}
-#is_active {
-    position: relative;
-    padding: 80px 0% 0% bottom;
-    text-align: center;
-}
-#question_text {
-    position: relative;
-    text-align: justify;
-}
-#answer1 {
-    position: relative;
-    text-align: center;
-}
-#answer1_count {
-    position: relative;
-    text-align: center;
-}
-#answer1_text {
-    position: relative;
-    text-align: justify;
-}
-#answer2 {
-    position: relative;
-    text-align: center;
-}
-#answer2_count {
-    position: relative;
-    text-align: center;
-}
-#answer2_text {
-    position: relative;
-    text-align: justify;
-}
-</style>
-</head>
-"""
+    body = f"<body><div>" \
+           f"<h3>Голосование {'началось' if is_active else 'завершено'}!</h3>" \
+           f"<ul>" \
+           f"<li><div>А) <i>{answer1}</i>  -  <b>{count_answer1}</b></div></li>" \
+           f"<li><div>Б) <i>{answer2}</i>  -  <b>{count_answer2}</b></div></li>" \
+           f"</ul></div></body>"
 
-    body = """
-<body>
-<p id="is_active">Голосование {is_active}</p>
-<p id="question_text">{question_text}</p>
-<div id="answer1">
-    <p id="answer1_count">{answer1_count}</p>
-    <p id="answer1_text">{answer1_text}</p>
-</div>
-<div id="answer2">
-    <p id="answer2_count">{answer2_count}</p>
-    <p id="answer2_text">{answer2_text}</p>
-</div>
-</body>
-"""
-    body = body.format(
-        is_active="началось" if is_active else "завершено",
-        question_text=question,
-        answer1_count=count_answer1, answer1_text=answer1,
-        answer2_count=count_answer2, answer2_text=answer2
-    )
-
-    return "<html>" + head + body + "</html>", 200
+    return "<html>" + body + "</html>", 200
 
 # Telegram ===================================================================================================
 
