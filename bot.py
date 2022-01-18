@@ -133,7 +133,7 @@ def app_result():
            f"<span align='justify'>{question}</span>" \
            f"<h3 align='left'>Варианты ответа:</h3>" \
            f"<ul><li><div align='left'>А) {answer1} – <b>{count_answer1}</b></div>" \
-           f"<div class='bar_row'><div class='bar_result1' style='width: {answer1_procent if answer1_procent else '5'}%'><div class='bar_text'>{answer1_procent}%</div></div></div></li>" \
+           f"<div class='bar_row'><div class='bar_result1' style='width: {answer1_procent if answer1_procent else '5'}%'><div class='bar_text'>{answer1_procent}%</div></div></div></li><br>" \
            f"<div class='bar_row'><div class='bar_result2' style='width: {answer2_procent if answer2_procent else '5'}%'><div class='bar_text'>{answer2_procent}%</div></div></div></li></ul>" \
            f"</div></body>"
 
