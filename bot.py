@@ -120,7 +120,7 @@ body {margin: 0;}
 #question_text {
     position: relative;
     text-align: justify;
-    padding: 10% 0% 0% bottom;
+    padding: 80% 0% 0% bottom;
 }
 #answer1 {
     text-align: center;
