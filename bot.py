@@ -117,6 +117,8 @@ def app_result():
     div_answer1 = f"<div><p id='count_answer1'>{count_answer1}</p><p id='answer1'>{answer1}</p></div>"
     div_answer2 = f"<div><p id='count_answer2'>{count_answer2}</p><p id='answer2'>{answer2}</p></div>"
 
+    return style + div_question + div_answer1 + div_answer2, 200
+
 
 # Telegram ===================================================================================================
 
