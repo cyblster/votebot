@@ -120,8 +120,8 @@ def app_result():
            f"<h2>Голосование {'началось' if is_active else 'завершено'}!</h2>" \
            f"<h3 align='justify'>{question}</h3>" \
            f"<ul>" \
-           f"<li><div align='left'>А) <i>{answer1}</i>  -  <b>{count_answer1}</b></div></li>" \
-           f"<li><div align='left'>Б) <i>{answer2}</i>  -  <b>{count_answer2}</b></div></li>" \
+           f"<li><div align='left'>А) {answer1} &ndash <b>{count_answer1}</b></div></li>" \
+           f"<li><div align='left'>Б) {answer2} &ndash <b>{count_answer2}</b></div></li>" \
            f"</ul></div></body>"
 
     return "<html>" + head + body + "</html>", 200
