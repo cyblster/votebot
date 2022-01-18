@@ -82,7 +82,17 @@ def mysql_execute(host: str, user: str, passwd: str, db: str, query: str, autoco
 
 @server.route("/result")
 def app_result():
-    pass
+    count_answer1 = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query=f"SELECT COUNT(answer) WHERE answer = 1 ORDER BY answer"
+    )
+
+    count_answer2 = mysql_execute(
+        mysql_host, mysql_user, mysql_passwd, mysql_db,
+        query=f"SELECT COUNT(answer) WHERE answer = 2 ORDER BY answer"
+    )
+
+    return f"1: {count_answer1}<br>2: {count_answer2}", 200
 
 
 # Telegram ===================================================================================================
