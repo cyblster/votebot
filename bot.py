@@ -161,19 +161,19 @@ def command_start(message):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM owner WHERE telegram_id = {message.from_user.id}"
     ):
-        telegram_id_list = mysql_execute(
-            mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query="SELECT telegram_id FROM member"
-        )
-
         _id, question, answer1, answer2, is_active = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"SELECT * FROM system"
         )
 
+        people = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT COUNT(*) FROM member"
+        )
+
         bot.send_message(
             chat_id=message.from_user.id,
-            text=owner_menu_text.format(len(telegram_id_list) if telegram_id_list else 0, question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -328,10 +328,15 @@ def keyboard_owner(call):
                     reply_markup=member_inline_keyboard
                 )
 
+        people = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT COUNT(*) FROM member"
+        )
+
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(len(telegram_id_list) if telegram_id_list else 0, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(people, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -390,17 +395,22 @@ def keyboard_owner(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(len(telegram_id_list) if telegram_id_list else 0, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(0, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
 
     elif call.data == "owner_refresh":
+        people = mysql_execute(
+            mysql_host, mysql_user, mysql_passwd, mysql_db,
+            query="SELECT COUNT(*) FROM member"
+        )
+
         try:
             bot.edit_message_text(
                 chat_id=call.from_user.id,
                 message_id=call.message.message_id,
-                text=owner_menu_text.format(len(telegram_id_list) if telegram_id_list else 0, answer1, answer2, "Да" if is_active else "Нет"),
+                text=owner_menu_text.format(people, answer1, answer2, "Да" if is_active else "Нет"),
                 parse_mode="HTML",
                 reply_markup=owner_inline_keyboard
             )
@@ -456,15 +466,15 @@ def keyboard_settings(call):
         setting_answer1_is_active = False
         setting_answer2_is_active = False
 
-        telegram_id_list = mysql_execute(
+        people = mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
-            query="SELECT telegram_id FROM member"
+            query="SELECT COUNT(*) FROM member"
         )
 
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(len(telegram_id_list) if telegram_id_list else 0, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_menu_text.format(people, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
