@@ -115,29 +115,36 @@ def app_result():
 <style type="text/css">
 body {margin: 0;}
 #is_active {
+    position: relative;
+    padding: 80px 0% 0% bottom;
     text-align: center;
 }
 #question_text {
     position: relative;
     text-align: justify;
-    padding: 80% 0% 0% bottom;
 }
 #answer1 {
+    position: relative;
     text-align: center;
 }
 #answer1_count {
+    position: relative;
     text-align: center;
 }
 #answer1_text {
+    position: relative;
     text-align: justify;
 }
 #answer2 {
+    position: relative;
     text-align: center;
 }
 #answer2_count {
+    position: relative;
     text-align: center;
 }
 #answer2_text {
+    position: relative;
     text-align: justify;
 }
 </style>
