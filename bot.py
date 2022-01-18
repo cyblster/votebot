@@ -171,6 +171,8 @@ def command_start(message):
             query="SELECT COUNT(*) FROM member"
         )[0]
 
+        print(people)
+
         bot.send_message(
             chat_id=message.from_user.id,
             text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
