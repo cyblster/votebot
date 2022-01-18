@@ -108,14 +108,24 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
+    head = "<head>" \
+           "<meta charset='utf-8'>" \
+           "<title>Результаты голосования</title>" \
+           "<style>" \
+           "li {display: inline-block;}" \
+           "</style>" \
+           "</head>"
+
     body = f"<body><div>" \
-           f"<h3>Голосование {'началось' if is_active else 'завершено'}!</h3>" \
+           f"<h2>Голосование {'началось' if is_active else 'завершено'}!</h2>" \
+           f"<h3 align='justify'>{question}</h3>" \
            f"<ul>" \
-           f"<li><div>А) <i>{answer1}</i>  -  <b>{count_answer1}</b></div></li>" \
-           f"<li><div>Б) <i>{answer2}</i>  -  <b>{count_answer2}</b></div></li>" \
+           f"<li><div align='left'>А) <i>{answer1}</i>  -  <b>{count_answer1}</b></div></li>" \
+           f"<li><div align='left'>Б) <i>{answer2}</i>  -  <b>{count_answer2}</b></div></li>" \
            f"</ul></div></body>"
 
-    return "<html>" + body + "</html>", 200
+    return "<html>" + head + body + "</html>", 200
+
 
 # Telegram ===================================================================================================
 
@@ -234,13 +244,13 @@ def message_any(message):
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"UPDATE system SET question = '{message.text}' WHERE id = 1"
         )
-    
+
     elif setting_answer1_is_active:
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
             query=f"UPDATE system SET answer1 = '{message.text}' WHERE id = 1"
         )
-    
+
     elif setting_answer2_is_active:
         mysql_execute(
             mysql_host, mysql_user, mysql_passwd, mysql_db,
@@ -372,7 +382,7 @@ def keyboard_settings(call):
     global setting_question_is_active
     global setting_answer1_is_active
     global setting_answer2_is_active
-    
+
     question, answer1, answer2, is_active = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
         query=f"SELECT * FROM system"
@@ -382,7 +392,7 @@ def keyboard_settings(call):
         setting_question_is_active = True
         setting_answer1_is_active = False
         setting_answer2_is_active = False
-        
+
         bot.send_message(
             chat_id=call.from_user.id,
             text="Напишите текст для вопроса:"
@@ -412,7 +422,7 @@ def keyboard_settings(call):
         setting_question_is_active = False
         setting_answer1_is_active = False
         setting_answer2_is_active = False
-        
+
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
