@@ -82,12 +82,6 @@ def mysql_execute(host: str, user: str, passwd: str, db: str, query: str, autoco
 
 @server.route("/")
 def app_result():
-    question = ""
-    answer1 = ""
-    answer2 = ""
-    count_answer1 = 0
-    count_answer2 = 0
-
     is_active = mysql_execute(
         mysql_host, mysql_user, mysql_passwd, mysql_db,
         query="SELECT is_active FROM system"
