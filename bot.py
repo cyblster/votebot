@@ -108,10 +108,14 @@ def app_result():
             query=f"SELECT * FROM history ORDER BY id DESC LIMIT 1"
         )
 
-    return f"<div align='center'>{'Голосование началось' if is_active else 'Голосование завершено'}<div><br>" \
-           f"<div>{question}</div><br>" \
-           f"<div>{count_answer1}<br>{answer1}</div><br>" \
-           f"<div>{count_answer2}<br>{answer2}</div>", 200
+    style = "<style type='text/css'>" \
+            "body {margin: 0;}" \
+            "#queston {font-family: Arial; font-size: 200%; font-weight: lighter;}" \
+            "</style>"
+
+    div_question = f"<div id='question'><p>Голосование {'началось' if is_active else 'завершено'}</p></div>"
+    div_answer1 = f"<div><p id='count_answer1'>{count_answer1}</p><p id='answer1'>{answer1}</p></div>"
+    div_answer2 = f"<div><p id='count_answer2'>{count_answer2}</p><p id='answer2'>{answer2}</p></div>"
 
 
 # Telegram ===================================================================================================
