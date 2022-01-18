@@ -121,7 +121,7 @@ def command_start(message):
     ):
         bot.send_message(
             chat_id=message.from_user.id,
-            text="Вы уже зарегистрированы. Ожидайте начала голосования."
+            text="Вы уже зарегистрированы. Ожидайте начала или завершения голосования."
         )
 
     else:
