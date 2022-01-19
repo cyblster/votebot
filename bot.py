@@ -14,7 +14,7 @@ mysql_user = environ.get("mysql_user")
 mysql_passwd = environ.get("mysql_password")
 mysql_db = environ.get("mysql_database")
 
-owner_menu_text = "<b>[Меню]</b>\n\n" \
+owner_text = "<b>[Меню]</b>\n\n" \
                   "<b>Участников:</b> {} чел.\n\n" \
                   "<b>Вопрос:</b>\n{}\n\n" \
                   "<b>Варианты ответа:</b>\nА) <i>{}</i>\nБ) <i>{}</i>\n\n" \
@@ -178,7 +178,7 @@ def command_start(message):
 
         bot.send_message(
             chat_id=message.from_user.id,
-            text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -341,7 +341,7 @@ def keyboard_owner(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -400,7 +400,7 @@ def keyboard_owner(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(0, question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_text.format(0, question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
@@ -417,7 +417,7 @@ def keyboard_owner(call):
             bot.edit_message_text(
                 chat_id=call.from_user.id,
                 message_id=call.message.message_id,
-                text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
+                text=owner_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
                 parse_mode="HTML",
                 reply_markup=owner_inline_keyboard
             )
@@ -481,7 +481,7 @@ def keyboard_settings(call):
         bot.edit_message_text(
             chat_id=call.from_user.id,
             message_id=call.message.message_id,
-            text=owner_menu_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
+            text=owner_text.format(people, question, answer1, answer2, "Да" if is_active else "Нет"),
             parse_mode="HTML",
             reply_markup=owner_inline_keyboard
         )
