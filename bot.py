@@ -134,7 +134,7 @@ def app_result():
            "</style>" \
            "</head>"
 
-    body = f"<body><div>" \
+    body = f"<body id='block'><div>" \
            f"<h2>Голосование {'началось' if is_active else 'завершено'}!</h2>" \
            f"<h3 align='left'>Вопрос:</h3>" \
            f"<span align='justify'>{question}</span>" \
