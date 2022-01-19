@@ -118,7 +118,7 @@ def app_result():
            "<meta charset='utf-8'>" \
            "<title>Результаты голосования</title>" \
            "<script>" \
-           "setInterval(function() {window.location.reload();}, 1000);" \
+           "setInterval(function() {window.location.reload();}, 3000);" \
            "</script>" \
            "<style>" \
            "body {font-family: Roboto, sans-serif;}" \
