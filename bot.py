@@ -142,8 +142,7 @@ def app_result():
            f"<div class='bar_row'><div class='bar_result1' style='width: {str(answer1_procent) + '%' if answer1_procent else '30px'}'><div class='bar_text'>{answer1_procent}%</div></div></div></li>" \
            f"<li><div align='left'>Б) {answer2} – <b>{count_answer2}</b></div>" \
            f"<div class='bar_row'><div class='bar_result2' style='width: {str(answer2_procent) + '%' if answer2_procent else '30px'}'><div class='bar_text'>{answer2_procent}%</div></div></div></li></ul>" \
-           f"</div>" \
-           f"<a href='JavaScript:setTimeout(loadUrl, 1000)' hidden>refresh_link</a></body>"
+           f"</div></body>"
 
     return "<html>" + head + body + "</html>", 200
 
