@@ -117,7 +117,7 @@ def app_result():
     head = "<head>" \
            "<meta charset='utf-8'>" \
            "<title>Результаты голосования</title>" \
-           "<script  src=эhttp://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.jsэ type='text/javascript'>" \
+           "<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'>" \
            "setInterval(function(){$('#block').load('index.php #block');}, 5000);" \
            "</script>" \
            "<style>" \
