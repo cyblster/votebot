@@ -117,6 +117,10 @@ def app_result():
     head = "<head>" \
            "<meta charset='utf-8'>" \
            "<title>Результаты голосования</title>" \
+           "<script>" \
+           "$('#block').load('index.php #block');" \
+           "setInterval(function(){$('#block').load('index.php #block');}, 5000);" \
+           "</script>" \
            "<style>" \
            "body {font-family: Roboto, sans-serif;}" \
            "h2 {color: #414a5f; margin-top: -20px; margin-bottom: -20px; font-weight: 700; font-size: 36px; line-height: 2.5;}" \
