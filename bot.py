@@ -117,9 +117,6 @@ def app_result():
     head = "<head>" \
            "<meta charset='utf-8'>" \
            "<title>Результаты голосования</title>" \
-           "<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'>" \
-           "setInterval(function(){$('#block').load('index.php #block');}, 5000);" \
-           "</script>" \
            "<style>" \
            "body {font-family: Roboto, sans-serif;}" \
            "h2 {color: #414a5f; margin-top: -20px; margin-bottom: -20px; font-weight: 700; font-size: 36px; line-height: 2.5;}" \
@@ -142,7 +139,8 @@ def app_result():
            f"<div class='bar_row'><div class='bar_result1' style='width: {str(answer1_procent) + '%' if answer1_procent else '30px'}'><div class='bar_text'>{answer1_procent}%</div></div></div></li>" \
            f"<li><div align='left'>Б) {answer2} – <b>{count_answer2}</b></div>" \
            f"<div class='bar_row'><div class='bar_result2' style='width: {str(answer2_procent) + '%' if answer2_procent else '30px'}'><div class='bar_text'>{answer2_procent}%</div></div></div></li></ul>" \
-           f"</div></body>"
+           f"</div>" \
+           f"<a href='JavaScript:setTimeout(loadUrl,1000)' hidden>refresh_link</a></body>"
 
     return "<html>" + head + body + "</html>", 200
 
